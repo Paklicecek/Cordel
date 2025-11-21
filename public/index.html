@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arme v callu</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Cordel</h1>
+  <p>Your username</p>
+  <div class = "rmvInputContainer">
+    <p class="userError" style="color: red;"></p>
+    <input name="input" id="userInput" type="text" class="userInput">
+  </div>
+  <p>Remove a message</p>
+  <div class = "rmvInputContainer">
+    <p class="rmvError" style="color: red;"></p>
+    <input name="input" id="rmvInput" type="text" class="rmvInput">
+    <button class="rmvButton">remove</button>
+  </div>
+  <label for="input">Send a message </label>
+  <div class = "inputContainer">
+    <p class="error" style="color: red;"></p>
+    <input name="input" id="input" type="text" class="input">
+    <button class="button">send</button>
+  </div>
+  <p class="typing"></p>
+  <p class="cordel"></p>
+  <div class="messageContainer">
+
+  </div>
+  <p id="out" style="color: red;"></p>
+  <script>
+    let p = document.querySelector(".cordel")
+    let input = document.querySelector(".input")
+    let rmvInput = document.querySelector(".rmvInput")
+    let rmvButton = document.querySelector(".rmvButton")
+    let button = document.querySelector(".button")
+    let messageContainer = document.querySelector(".messageContainer")
+    let lastShown = 0
+    let inputContainer = document.querySelector(".inputContainer")
+    let errorMessage = document.querySelector(".error")
+    let messageIsFine = false
+    let lenghtError = false
+    let inputValue = ""
+    let reloadMessages = false
+    let userInput = document.querySelector(".userInput")
+    let username
+    let isEditing = false
+    let typing = false
+    let userTyping = ""
+    let typingTag = document.querySelector(".typing")
+    let display = false
+    let usersTyping = 0
+    function removeMessage(){
+      let idToRemove = rmvInput.value 
+      let theMessage = document.getElementById("text-" + idToRemove)
+      theMessage.remove()
+      fetch("/api/remove",{
+        method:"post",
+        headers:{
+          "Content-Type": "application/json"
+        },
+        body:JSON.stringify({
+          msgToRemove: idToRemove,
+          rmvMessage: true
+        })
+      
+      })     
+    }
+    async function sendMessage(){
+        button.addEventListener("click", () => {
+            if(!input.value.trim() == "" ){
+              if(Array.from(input.value).length > 255 && Array.from(input.value).length > 1){
+                errorMessage.textContent = "Your message can not exceed 255 characters"
+                messageIsFine = false 
+                startInterval()
+                lenghtError = true
+              }
+              if(!lenghtError){
+                username = userInput.value 
+                sendMessageAPI()
+                errorMessage.textContent = ""
+                messageIsFine = true 
+              }
+            }
+            else{
+              errorMessage.textContent = "Your message is empty, please type something"
+              messageIsFine = false 
+              startInterval()
+            }
+        })
+        input.addEventListener("keydown", (event) => {
+          if(event.key === "Enter" || event.key === "enter"){
+            if(!input.value.trim() == "" ){
+              if(Array.from(input.value).length > 255 && Array.from(input.value).length > 1){
+                errorMessage.textContent = "Your message can not exceed 255 characters"
+                messageIsFine = false 
+                startInterval()
+                lenghtError = true
+              }
+              if(!lenghtError){
+                username = userInput.value 
+                sendMessageAPI()
+                errorMessage.textContent = ""
+                messageIsFine = true 
+              }
+            }
+            else{
+              errorMessage.textContent = "Your message is empty, please type something"
+              messageIsFine = false 
+              startInterval()
+            }            
+          }
+        })
+      }
+    function startInterval(){
+      if(!messageIsFine){
+        let interval =  setInterval(() => {
+          if(Array.from(input.value).length > 255 && Array.from(input.value).length > 1){
+            errorMessage.textContent = "Your message can not exceed 255 characters"
+            messageIsFine = false 
+          }
+          else if(input.value.trim() == "" ){
+            errorMessage.textContent = "Your message is empty, please type something"
+            messageIsFine = false 
+          }
+          else{
+            errorMessage.textContent = ""
+            messageIsFine = true
+            lenghtError = false
+            clearInterval(interval)
+          }
+        }, 300);
+      }
+    }
+
+    async function loadMessage(){
+      setInterval(() => { 
+        fetch("/api/load")
+        .then(resp => resp.json())
+        .then(data => {
+
+          if(!isEditing && (data.rldMessage || reloadMessages)){
+            const allMessages = document.querySelectorAll(".messageClass");
+              allMessages.forEach(m => m.remove());
+              lastShown = 0;
+              reloadMessages = false
+          }
+            if (data.message.length < lastShown) {
+              const allMessages = document.querySelectorAll(".messageClass");
+              allMessages.forEach(m => m.remove());
+              lastShown = 0;
+            }
+            for(let i = lastShown; i < data.message.length; i++){
+              let newP = document.createElement("p")
+              let textP = document.createElement("p")
+
+              messageContainer.appendChild(newP)
+              messageContainer.appendChild(textP)
+
+              newP.textContent = data.message[i].time + " ID: " + data.message[i].id + " " + data.message[i].user + ": "
+              textP.textContent = data.message[i].msg
+
+              newP.id = "meta-" + data.message[i].id
+              textP.id = "text-" + data.message[i].id
+
+              newP.classList.add("messageClass")
+              textP.classList.add("messageClass")
+
+              textP.addEventListener("dblclick", () => {
+                isEditing = true;
+                const p = document.getElementById(textP.id);
+                const input = document.createElement("input")
+                const originalText = p.textContent
+                input.value = p.textContent
+                inputValue = input.value
+                p.replaceWith(input)
+                input.addEventListener("keydown", (event) => {
+                  if(event.key == "Enter" || event.key == "enter"){
+                    reloadMessages = true
+                    fetch("/api/update",{
+                      method:"post",
+                      headers:{
+                        "Content-Type": "application/json"
+                      },
+                      body:JSON.stringify({
+                        id: Number(textP.id.replace("text-", "")),
+                        newMessage: input.value,
+                        reload: reloadMessages
+                      })
+                    })
+                    const newTextP = document.createElement("p")
+                    newTextP.id = textP.id
+                    newTextP.classList.add("messageClass")
+                    newTextP.textContent = input.value
+                    input.replaceWith(newTextP)
+                    idToUpdate = textP.id
+                    isEditing = false;
+                    reloadMessages = true;
+                    // here remove both event listeners
+                    textP.removeEventListener("dblclick", () => {
+                      
+                    }); // Fails
+                    input.removeEventListener("keydown", true); // Succeeds
+                  }
+                })
+              })
+
+            }
+            lastShown = data.message.length
+        })
+        .catch(err => {
+          document.getElementById("out").textContent = "Error: " + err;
+        })
+      }, 300);
+    }
+    function sendMessageAPI() {
+      let message = input.value
+      input.value = ""
+      fetch("/api/send",{
+        method:"post",
+        headers:{
+          "Content-Type": "application/json"
+        },
+        body:JSON.stringify({
+          user:username,
+          msg:message
+        })
+      })
+    }
+    function user(){
+      fetch(`/api/greet/${username}`)
+      .then(resp => resp.json())
+          .then(data => {
+            display = data.ok
+          })
+          .catch(err => {
+            document.getElementById("out").textContent = "Error: " + err;
+          })
+
+    }
+    function nowTyping(){
+      fetch(`/api/type/${typing}`)
+      .then(resp => resp.json())
+          .then(data => {
+            userTyping = data.type
+          })
+          .catch(err => {
+            document.getElementById("out").textContent = "Error: " + err;
+          })
+    }
+    async function isTyping(){
+      user()
+      setInterval(() => {
+        username = userInput.value 
+        if(input.value.length > 0 && username != undefined && username != "" && display == true){
+          typing = true
+          user()
+          nowTyping()
+          console.log(userTyping)
+          typingTag.textContent = userTyping
+        }
+        else{
+          typing = false
+          typingTag.textContent = ""
+          display == false
+        }
+      }, 300);
+    }
+    isTyping()
+    loadMessage()
+    sendMessage()
+    rmvButton.addEventListener("click", removeMessage)
+  </script>
+</body>
+</html>
+
+
+
