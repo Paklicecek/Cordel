@@ -36,8 +36,10 @@
 
 // const PORT = process.env.PORT || 3696;
 // app.listen(PORT, () => console.log(`http://localhost:${PORT}`));
-require('dotenv').config();
-const express = require('express')
+
+import dotenv from 'dotenv';
+dotenv.config();
+import express from 'express';
 const app = express()
 const port = process.env.PORT
 let messages = []
