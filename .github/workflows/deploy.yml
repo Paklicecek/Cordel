@@ -1,0 +1,30 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches:
+      - main  # Spustí se jen když pushneš do main větve
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Připojení přes SSH a update
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: 22
+          script: |
+            # Jdi do složky projektu (ujisti se, že se jmenuje Cordel - velké C)
+            cd ~/Cordel
+            
+            # Stáhni změny
+            git pull origin main
+            
+            # Nainstaluj nové knihovny (kdyby přibyly)
+            npm install
+            
+            # Restartuje aplikaci
+            pm2 restart cordel
