@@ -1,0 +1,42 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+body{
+    width: 100%;
+    height: 100vh;
+    background: linear-gradient(135deg, #0F1219 0%, #161922 35%, #212735 100%);
+}
+main{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    .logo{
+        width: 76px;
+        height: 76px;
+    }
+    .container{
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin: 8px;
+        padding: 24px;
+        background-color: rgb(24, 28, 37);
+        border-radius: 32px;
+        border: #292E3D 1px solid;
+        color: #ffffff;
+    }
+    .backgroundOption{
+        display: flex;
+        flex-direction: row;
+    }
+    .passwordContainer{
+        display: flex;
+        flex-direction: row;
+        gap: 6px;
+    }
+}
