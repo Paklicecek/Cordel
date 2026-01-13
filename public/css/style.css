@@ -1,58 +1,228 @@
-*{
+:root {
+    --bg-gradient-start: #0F1219;
+    --bg-gradient-mid: #161922;
+    --bg-gradient-end: #212735;
+    --card-bg: #181C25;
+    --card-border: #292E3D;
+    --text-white: #FFFFFF;
+    --text-gray: #8A99A8;
+    --input-bg: #222732;
+    --input-border: #292E3D;
+    --input-placeholder: #566275;
+    --toggle-bg: #2A2F3E;
+    --primary-gradient: linear-gradient(90deg, #2E85E6 0%, #845EF7 100%);
+}
+
+* {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
 }
-body{
+
+body {
     width: 100%;
-    height: 100vh;
-    background: linear-gradient(135deg, #0F1219 0%, #161922 35%, #212735 100%);
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-mid) 35%, var(--bg-gradient-end) 100%);
     font-family: 'Inter', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-main{
+
+main {
     width: 100%;
-    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 4px;
-    .logo{
-        width: 76px;
-        height: 76px;
-    }
-    h1{
-        color: white;
-        font-weight: 800;
-        font-style: italic;
-    }
-    #slug{
-        color: #8A99A8;
-    }
-    #tos{
-        color: #8A99A8;
-        font-size: 14px;
-    }
-    .container{
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        margin: 8px;
+    padding: 20px;
+}
+
+.header-content {
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.logo {
+    width: 76px;
+    height: 76px;
+    margin-bottom: 4px;
+}
+
+h1 {
+    color: var(--text-white);
+    font-weight: 800;
+    font-style: italic;
+}
+
+#slug {
+    color: var(--text-gray);
+    margin-top: 4px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+    background-color: var(--card-bg);
+    border-radius: 32px;
+    border: var(--card-border) 1px solid;
+    color: var(--text-white);
+    width: 100%;
+    max-width: 458px;
+    box-shadow: 0px 4px 24px rgba(0, 0, 0, 0.25);
+}
+
+h2 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    color: var(--text-gray);
+    font-size: 14.5px;
+    margin-bottom: 16px;
+}
+
+.backgroundOption {
+    display: flex;
+    background-color: var(--toggle-bg);
+    padding: 4px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    position: relative;
+}
+
+.glider {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: calc(50% - 4px);
+    height: calc(100% - 8px);
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    z-index: 1;
+}
+
+.toggle-btn {
+    flex: 1;
+    background: none;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    color: var(--text-gray);
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    position: relative;
+    z-index: 2;
+    transition: color 0.3s ease;
+}
+
+.toggle-btn.active {
+    color: var(--text-white);
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    font-size: 14.5px;
+    font-weight: 600;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 14px 16px;
+    background-color: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: 8px;
+    color: var(--text-white);
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+}
+
+input::placeholder {
+    color: var(--input-placeholder);
+}
+
+input:focus {
+    border-color: #4a5568;
+}
+
+.passwordContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    font-size: 14.5px;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    color: var(--text-gray);
+}
+
+input[type="checkbox"] {
+    accent-color: #2E85E6;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.forgot-link {
+    color: var(--text-gray);
+    text-decoration: none;
+    font-size: 14.5px;
+}
+
+.sign-in-btn {
+    width: 100%;
+    padding: 11px;
+    border: none;
+    border-radius: 12px;
+    background: var(--primary-gradient);
+    color: var(--text-white);
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sign-in-btn:hover {
+    opacity: 0.8;
+    scale: 1.05;
+}
+.sign-in-btn:active {
+    opacity: 0.8;
+    scale: 0.95;
+}
+#tos {
+    color: var(--text-gray);
+    font-size: 12px;
+    margin-top: 8px;
+    text-align: center;
+}
+
+@media (max-width: 480px) {
+    .container {
         padding: 24px;
-        background-color: rgb(24, 28, 37);
-        border-radius: 32px;
-        border: #292E3D 1px solid;
-        color: #ffffff;
-        width: 458px;
-        height: 368px;
-    }
-    .backgroundOption{
-        display: flex;
-        flex-direction: row;
-    }
-    .passwordContainer{
-        display: flex;
-        flex-direction: row;
-        gap: 6px;
     }
 }
