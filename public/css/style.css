@@ -10,7 +10,7 @@
     --input-border: #292E3D;
     --input-placeholder: #566275;
     --toggle-bg: #2A2F3E;
-    --primary-gradient: linear-gradient(90deg, #2E85E6 0%, #845EF7 100%);
+    --primary-gradient: #0285ff;
 }
 
 * {
@@ -141,6 +141,7 @@ h2 {
     font-weight: 600;
 }
 
+input[type="email"],
 input[type="text"],
 input[type="password"] {
     width: 100%;

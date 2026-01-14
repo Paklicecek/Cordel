@@ -17,14 +17,8 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: 22
           script: |
-            # Jdi do složky projektu (ujisti se, že se jmenuje Cordel - velké C)
             cd ~/Cordel
-            
-            # Stáhni změny
-            git pull origin main
-            
-            # Nainstaluj nové knihovny (kdyby přibyly)
+            git fetch origin main
+            git reset --hard origin/main
             npm install
-            
-            # Restartuje aplikaci
             pm2 restart cordel
