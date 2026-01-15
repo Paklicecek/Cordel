@@ -19,7 +19,7 @@ app.use(express.json())
 app.use(express.static(path.join(__dirname, '../public')))
 
 app.post('/api/signup',(req, res) =>{
-    const { user,password } = req.body
+    const { user,email,password } = req.body
     try{
         if(user.length < 3 || password.length < 6){
         return res.json({short: true , error: "Username or password is too short."})

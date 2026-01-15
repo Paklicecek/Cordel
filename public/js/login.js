@@ -51,17 +51,23 @@ form.addEventListener('submit', async (event) => {
     event.preventDefault()
     const user = userInput.value
     const password = passwordInput.value
+    const data = {user,password}
     let endpoint = '/api/signin'
-    if(submitBtn.classList.contains("active")){
+    const isSignup = signupBtn.classList.contains("active")
+    if(isSignup){
         endpoint = '/api/signup'
+        const emailInput = document.getElementById("emailInput")
+        if(emailInput) {
+             data.email = emailInput.value
+        }
     }
     const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({user,password})
-    });
+        body: JSON.stringify(data)
+    })
 
     const result = await response.json()
 
