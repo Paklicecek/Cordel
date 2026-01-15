@@ -4,6 +4,7 @@ import { Server } from 'socket.io';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from "dotenv";
+import bcrypt from "bcryptjs"
 dotenv.config();
 
 
@@ -18,13 +19,14 @@ const io = new Server(httpServer);
 app.use(express.json())
 app.use(express.static(path.join(__dirname, '../public')))
 
-app.post('/api/signup',(req, res) =>{
+app.post('/api/signup',async (req, res) =>{
     const { user,email,password } = req.body
     try{
         if(user.length < 3 || password.length < 6){
         return res.json({short: true , error: "Username or password is too short."})
         }
         res.json({ short: false, message: "Account was succesfully created." })
+        const hash = await bcrypt.hash(password, 10)
     }
     catch(err){
         console.log(err)
