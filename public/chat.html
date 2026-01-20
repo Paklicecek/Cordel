@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cordel Chat</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <link rel="stylesheet" href="css/chat.css">  
+    
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/chat.js" defer></script>
+</head>
+<body>
+
+    <div class="app-layout">
+        
+        <header class="channel-header">
+            <div class="channel-info">
+                <img src="img/logo.png" alt="Cordel" class="app-logo">
+                <span class="hash">#</span>
+                <h2 class="channel-name">FREAKOFF CORPORATION</h2>
+            </div>
+            <button id="mobileMenuBtn" class="icon-btn mobile-only">
+                <i class="ph ph-list"></i>
+            </button>
+        </header>
+
+        <div class="content-wrapper">
+            
+            <main class="chat-main">
+                
+                <div class="messages-container" id="messages">
+
+                     <div class="message">
+                        <div class="avatar-wrapper">
+                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=King" alt="Avatar">
+                        </div>
+                        <div class="message-content">
+                            <div class="message-header">
+                                <span class="username">King Hallinta</span>
+                                <span class="timestamp">Today at 10:46 AM</span>
+                            </div>
+                            <p class="text">Hallinta corporation bude další google twin. </p>
+                        </div>
+                    </div>
+                    </div>
+
+                <div class="input-area-wrapper">
+                    <div class="chat-input-area">
+                        
+                        <div class="current-user-profile">
+                            <div class="avatar-small">
+                                <img src="img/pfps/test.gif" alt="My Avatar" id="currentUserAvatar">
+                            </div>
+                            <div class="user-details">
+                                <span class="my-username" id="currentUsername">Paklicek</span>
+                                <span class="status-text">Online</span>
+                            </div>
+                            <button class="settings-btn">
+                                <img src="img/icon/settings.png" alt="Settings">
+                            </button>
+                        </div>
+
+                        <form id="chatForm" class="message-form">
+                            <div class="input-wrapper">
+                            
+                                <input type="text" id="messageInput" placeholder="Message #FREAKOFF CORPORATION" autocomplete="off">
+                                <button type="button" class="emoji-btn">
+                                    <img src="img/icon/emoji.png" alt="Emoji">
+                                </button>
+                            </div>
+                            <button type="submit" class="send-btn">
+                                <img src="img/icon/send.png" alt="Send">
+                            </button>
+                        </form>
+
+                    </div>
+                </div>
+
+            </main>
+
+            <aside class="user-sidebar" id="userSidebar">
+                
+                <div class="user-group">
+                    <h3 class="group-title">ONLINE - 1</h3>
+
+                    <div class="user-item">
+                        <div class="avatar-wrapper status-online">
+                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=King" alt="User">
+                        </div>
+                        <span class="username">King Hallinta</span>
+                    </div>
+                </div>
+
+                <div class="user-group">
+                    <h3 class="group-title">OFFLINE - 1</h3>
+                    <div class="user-item opacity-low">
+                        <div class="avatar-wrapper status-offline">
+                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Paklicek" alt="User">
+                        </div>
+                        <span class="username">Paklicek</span>
+                    </div>
+                </div>
+
+            </aside>
+        </div> </div>
+
+</body>
+</html>
