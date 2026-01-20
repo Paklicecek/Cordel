@@ -5,6 +5,8 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from "dotenv";
 import bcrypt from "bcryptjs"
+import * as db from './config/db.js'
+
 dotenv.config();
 
 
@@ -23,22 +25,48 @@ app.post('/api/signup',async (req, res) =>{
     const { user,email,password } = req.body
     try{
         if(user.length < 3 || password.length < 6){
+        // Change error displaying on the site
         return res.json({short: true , error: "Username or password is too short."})
         }
-        res.json({ short: false, message: "Account was succesfully created." })
         const hash = await bcrypt.hash(password, 10)
+
+        await db.query(
+            'INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3)', 
+            [user, email, hash]
+        )
+        return res.json({ short: false, message: "Account was succesfully created." })
     }
     catch(err){
         console.log(err)
+        // Change error displaying on the site
+        if (err.code === '23505') {
+            return res.json({ short: true, error: "Username or email is already taken." })
+        }
+        return res.status(500).json({ error: "Database error" });
     }
 })
-app.post('/api/signin',(req, res) =>{
+app.post('/api/signin', async (req, res) =>{
     const { user,password } = req.body;
     try{
         if(user.length < 3 || password.length < 6){
         return res.json({ok: false, short: true , error: "Username or password is too short."})
         }   
-        res.json({ok: true, short: false, message: "Logged in succesfully." })
+        const result = await db.query(
+            'SELECT * FROM users WHERE username = $1', 
+            [user]
+        )
+        if(result.rows.length === 0){
+            return res.json({ok: false, short: true , error: "User doesn't exist. Please register first."})
+        }
+        const foundUser = result.rows[0]
+        const match = await bcrypt.compare(password,foundUser.password_hash)
+        
+
+        if (match) {
+            return res.json({ ok: true, short: false, message: "Logged in successfully." });
+        } else {
+            return res.json({ ok: false, error: "Wrong password" });
+        }
     }
     catch(err){ 
         console.log(err)
