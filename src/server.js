@@ -21,6 +21,7 @@ const io = new Server(httpServer);
 app.use(express.json())
 app.use(express.static(path.join(__dirname, '../public')))
 
+// REGISTER
 app.post('/api/signup',async (req, res) =>{
     const { user,email,password } = req.body
     try{
@@ -38,13 +39,15 @@ app.post('/api/signup',async (req, res) =>{
     }
     catch(err){
         console.log(err)
-        // Change error displaying on the site
+        //Error for duplicities (UNIQUE ON THE DB)
         if (err.code === '23505') {
+            // Change error displaying on the site
             return res.json({ short: true, error: "Username or email is already taken." })
         }
         return res.status(500).json({ error: "Database error" });
     }
 })
+// LOGIN
 app.post('/api/signin', async (req, res) =>{
     const { user,password } = req.body;
     try{
