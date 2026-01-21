@@ -66,8 +66,17 @@ app.post('/api/signin', async (req, res) =>{
         
 
         if (match) {
-            return res.json({ ok: true, short: false, message: "Logged in successfully." });
-        } else {
+            return res.json({
+                ok: true, 
+                short: false, 
+                message: "Logged in successfully.",
+                user:{
+                    id: foundUser.id,
+                    username:foundUser.username
+                }
+            })
+        } 
+        else {
             return res.json({ ok: false, error: "Wrong password" });
         }
     }

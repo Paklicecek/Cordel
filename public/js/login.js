@@ -72,6 +72,9 @@ form.addEventListener('submit', async (event) => {
     const result = await response.json()
 
     if (!result.short && result.ok) {
+        localStorage.setItem("user", result.user.username)
+        localStorage.setItem("ID", result.user.id)
+
         window.location.href = "../chat.html"
     } else {
         if(result.error){

@@ -4,10 +4,14 @@ const messagesContainer = document.querySelector(".messages-container")
 const chatForm = document.querySelector(".message-form")
 const messageInput = document.getElementById('messageInput')
 
-socket.on('chatMessage', (msg) => {
-    outputMessage(msg);
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-});
+const currentUser = localStorage.getItem("activeUSer")
+const id = localStorage.getItem("ID")
+
+if(!currentUser){
+    window.location.href = "../index.html"
+}
+
+
 
 chatForm.addEventListener('submit', (e) => {
     e.preventDefault()
@@ -17,12 +21,20 @@ chatForm.addEventListener('submit', (e) => {
     if (!msg) {
         return
     }
-    socket.emit('chatMessage', msg)
+    const messageData = {
+        user: currentUser,
+        msg: msg
+    }
+    socket.emit('chatMessage', messageData)
     messageInput.value = ''
 
 })
+socket.on('chatMessage', (data) => {
+    outputMessage(data);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+})
 
-function outputMessage(message) {
+function outputMessage(data) {
     const div = document.createElement('div');
     div.classList.add('message');
     
@@ -32,10 +44,10 @@ function outputMessage(message) {
         </div>
         <div class="message-content">
             <div class="message-header">
-                <span class="username">Anonymous</span>
+                <span class="username">${data.user}</span>
                 <span class="timestamp">${new Date().toLocaleTimeString()}</span>
             </div>
-            <p class="text">${message}</p>
+            <p class="text">${data.msg}</p>
         </div>
     `;
     
