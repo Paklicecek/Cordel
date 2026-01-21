@@ -1,38 +1,55 @@
-# Cordel - Chat Application Prototype
+# Cordel - Real-time Chat Application
 
-Cordel is a web-based messaging application I am building to learn backend development with **Node.js** and **Express**. 
+Cordel is a web-based messaging application built to demonstrate **full-stack development** principles using **Node.js** and **PostgreSQL**.
 
-Currently, the application functions using client-side polling to fetch messages. My next goal is to refactor this logic to use **Socket.io** for true bi-directional, real-time communication.
+Initially designed as a simple polling-based chat, the project has been upgraded to use **Socket.io** for bi-directional, real-time communication. It features user authentication, live presence tracking (Online/Offline users), and persistent message storage.
 
-## 🚧 Status: Work in Progress
-This project is currently in the development phase. The basic messaging loop works, but I am actively working on optimizing the backend logic.
+## 🚀 Features
+* **Real-time Messaging:** Instant message delivery using WebSockets (no page refresh required).
+* **User Authentication:** Secure Sign Up and Login system using `bcrypt` for password hashing.
+* **Live User Status:** Sidebar automatically updates to show who is currently Online or Offline.
+* **Persistent Data:** All users and messages are stored in a **PostgreSQL** database.
 
-## 🛠️ Technologies
+## 🛠️ Tech Stack
 * **Backend:** Node.js, Express
-* **Frontend:** HTML5, CSS3, Vanilla JavaScript
-* **Planned Upgrades:** Socket.io (for WebSockets integration)
+* **Real-time Engine:** Socket.io
+* **Database:** PostgreSQL (`pg` library)
+* **Frontend:** Vanilla JavaScript, HTML5, CSS3
 
 ## 📦 How to Run
 
 1.  **Clone the repository**
     ```bash
     git clone [https://github.com/Paklicecek/Cordel.git](https://github.com/Paklicecek/Cordel.git)
+    cd Cordel
     ```
+
 2.  **Install dependencies**
     ```bash
-    cd Cordel
     npm install
     ```
-3.  **Start the server**
+
+3.  **Database Setup**
+    Ensure you have PostgreSQL installed and running.
+    * Create a database named `cordel_db`.
+    * Import the schema (tables `users` and `messages`) or run the SQL setup commands.
+
+4.  **Environment Variables**
+    Create a `.env` file in the root directory:
+    ```env
+    PORT=3000
+    DATABASE_URL=postgres://user:password@localhost:5432/cordel_db
+    ```
+
+5.  **Start the server**
     ```bash
     npm start
     ```
-    *(Note: Ensure you have created a `.env` file with `PORT=3000` or similar)*
 
-4.  **Open in Browser**
+6.  **Open in Browser**
     Visit `http://localhost:3000`
 
-## 📝 Learning Goals
-* Building RESTful APIs (`/api/send`, `/api/load`).
-* Understanding client-server data flow.
-* Moving from polling (setInterval) to WebSockets.
+## 📝 Future Improvements
+* Add dynamic profile pictures (currently using placeholders).
+* Implement private messaging rooms.
+* Add message timestamp formatting customization.

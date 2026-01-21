@@ -153,10 +153,6 @@ io.on("connection", async (socket) => {
             console.error("Error while sending a message:", err)
         }
     })
-
-    socket.on("disconnect", () => {
-        console.log("Somebody left.")
-    })
 })
 
 

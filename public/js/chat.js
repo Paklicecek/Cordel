@@ -98,7 +98,7 @@ function displayMessage(data) {
 
     div.innerHTML = `
         <div class="avatar-wrapper">
-            <img src="../img/pfps/test.gif" alt="Avatar">
+            <img src="img/pfps/test.gif" alt="Avatar">
         </div>
         <div class="message-content">
             <div class="message-header">
