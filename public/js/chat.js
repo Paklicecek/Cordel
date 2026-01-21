@@ -5,9 +5,12 @@ const chatForm = document.querySelector(".message-form")
 const messageInput = document.getElementById("messageInput")
 const sidebar = document.querySelector(".user-sidebar")
 const usersListContainer = document.getElementById("users-list")
+const usernameBox = document.querySelector(".my-username")
 
 const currentUser = localStorage.getItem("user")
 const id = localStorage.getItem("ID")
+
+usernameBox.textContent = currentUser
 
 if(!currentUser){
     window.location.href = "../index.html"
