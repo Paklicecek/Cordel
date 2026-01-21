@@ -245,7 +245,7 @@ body {
             flex-direction: column;
             width: 240px; 
             background-color: var(--sidebar-bg);
-            padding: 24px 16px;
+            padding: 16px 16px 24px 16px;
             gap: 24px;
             overflow-y: auto;
             border-left: 1px solid var(--header-border); 
