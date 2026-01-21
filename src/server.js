@@ -84,7 +84,30 @@ app.post('/api/signin', async (req, res) =>{
         console.log(err)
     }
 })
-io.on('connection', async (socket) => {
+
+const onlineUsers = {}
+
+async function updateUsersList() {
+    const rows = await db.query('SELECT username FROM users')
+    const allUsers = rows.map(r => r.username)
+
+    const onlineNames = Object.values(onlineUsers)
+    const offlineNames = allUsers.filter(user => !onlineNames.includes(user))
+
+    io.emit('updateUserList', { online: onlineNames, offline: offlineNames })
+}
+
+io.on("connection", async (socket) => {
+
+    socket.on("join", (username) => {
+        onlineUsers[socket.id] = username
+        updateUsersList()
+    })
+    socket.on('disconnect', () => {
+        delete onlineUsers[socket.id]
+        updateUsersList()
+    })
+
     try {
         const result = await db.query(`
             SELECT messages.content, users.username, messages.created_at 
@@ -131,8 +154,8 @@ io.on('connection', async (socket) => {
         }
     })
 
-    socket.on('disconnect', () => {
-        console.log('Somebody left.')
+    socket.on("disconnect", () => {
+        console.log("Somebody left.")
     })
 })
 
