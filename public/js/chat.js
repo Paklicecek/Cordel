@@ -4,7 +4,7 @@ const messagesContainer = document.querySelector(".messages-container")
 const chatForm = document.querySelector(".message-form")
 const messageInput = document.getElementById('messageInput')
 
-const currentUser = localStorage.getItem("activeUSer")
+const currentUser = localStorage.getItem("user")
 const id = localStorage.getItem("ID")
 
 if(!currentUser){
