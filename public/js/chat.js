@@ -40,7 +40,7 @@ function outputMessage(data) {
     
     div.innerHTML = `
         <div class="avatar-wrapper">
-            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=${Math.random()}" alt="Avatar">
+            <img src="../img/pfps/test.gif" alt="Avatar">
         </div>
         <div class="message-content">
             <div class="message-header">
