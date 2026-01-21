@@ -72,9 +72,7 @@ form.addEventListener('submit', async (event) => {
     const result = await response.json()
 
     if (!result.short && result.ok) {
-        // Create some UI for when you succesfully signed up + fix the location swapping
-        alert(result.message)
-        //window.location.href = "/login.html"
+        window.location.href = "../chat.html"
     } else {
         if(result.error){
             console.error("Chyba: " + result.error)

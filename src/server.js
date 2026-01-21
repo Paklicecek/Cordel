@@ -75,6 +75,18 @@ app.post('/api/signin', async (req, res) =>{
         console.log(err)
     }
 })
+io.on('connection', (socket) => {
+    console.log('⚡ Někdo se připojil do chatu!')
+
+    socket.on('chatMessage', (msg) => {
+        io.emit('chatMessage', msg)
+    })
+
+    socket.on('disconnect', () => {
+        console.log('Někdo odešel.')
+    })
+})
+
 
 const PORT = process.env.PORT || 3000;
 httpServer.listen(PORT, () => {
