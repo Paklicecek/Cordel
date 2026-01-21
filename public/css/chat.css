@@ -253,7 +253,7 @@ body {
             .group-title {
                 font-size: 12px;
                 color: var(--text-muted);
-                margin-bottom: 8px;
+                margin: 0 8px;
                 padding-left: 8px;
             }
 
