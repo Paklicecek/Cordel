@@ -2,7 +2,7 @@ const socket = io()
 
 const messagesContainer = document.querySelector(".messages-container")
 const chatForm = document.querySelector(".message-form")
-const messageInput = document.getElementById('messageInput')
+const messageInput = document.getElementById("messageInput")
 const sidebar = document.querySelector(".user-sidebar")
 const usersListContainer = document.getElementById("users-list")
 
@@ -13,7 +13,7 @@ if(!currentUser){
     window.location.href = "../index.html"
 }
 
-chatForm.addEventListener('submit', (e) => {
+chatForm.addEventListener("submit", (e) => {
     e.preventDefault()
 
     const msg = messageInput.value
@@ -25,43 +25,43 @@ chatForm.addEventListener('submit', (e) => {
         user: currentUser,
         msg: msg
     }
-    socket.emit('chatMessage', messageData)
-    messageInput.value = ''
+    socket.emit("chatMessage", messageData)
+    messageInput.value = ""
 
 })
 
 
 socket.emit("join", currentUser)
-socket.on('updateUserList', ({ online, offline }) => {
-    usersListContainer.innerHTML = ''
+socket.on("updateUserList", ({ online, offline }) => {
+    usersListContainer.innerHTML = ""
 
     const createGroup = (title, users, isOnline) => {
         if (users.length === 0) return
 
-        const groupDiv = document.createElement('div')
-        groupDiv.className = 'user-group'
+        const groupDiv = document.createElement("div")
+        groupDiv.className = "user-group"
 
-        const h3 = document.createElement('h3')
-        h3.className = 'group-title'
+        const h3 = document.createElement("h3")
+        h3.className = "group-title"
         h3.textContent = title + " - " + users.length
         groupDiv.appendChild(h3)
 
         users.forEach(user => {
-            const userItem = document.createElement('div')
+            const userItem = document.createElement("div")
 
             if(isOnline) userItem.className = "user-item"
             else userItem.className = "user-item opacity-low"
 
-            const avatarWrapper = document.createElement('div')
+            const avatarWrapper = document.createElement("div")
             if(isOnline) avatarWrapper.className = "avatar-wrapper status-online"
             else avatarWrapper.className = "avatar-wrapper status-offline"
 
-            const img = document.createElement('img')
+            const img = document.createElement("img")
             img.src = "img/pfps/test.gif"
             img.alt = user
 
-            const span = document.createElement('span')
-            span.className = 'username'
+            const span = document.createElement("span")
+            span.className = "username"
             span.textContent = user
 
             avatarWrapper.appendChild(img)
@@ -72,22 +72,22 @@ socket.on('updateUserList', ({ online, offline }) => {
         usersListContainer.appendChild(groupDiv)
     }
 
-    createGroup('ONLINE', online, true);
-    createGroup('OFFLINE', offline, false);
-});
+    createGroup("ONLINE", online, true)
+    createGroup("OFFLINE", offline, false)
+})
 
-socket.on('chatMessage', (data) => {
+socket.on("chatMessage", (data) => {
     displayMessage(data)
     messagesContainer.scrollTop = messagesContainer.scrollHeight
 })
 
 function displayMessage(data) {
-    const div = document.createElement('div')
-    div.classList.add('message')
+    const div = document.createElement("div")
+    div.classList.add("message")
 
     const date = new Date(data.time || Date.now())
-    const hours = date.getHours().toString().padStart(2, '0')
-    const minutes = date.getMinutes().toString().padStart(2, '0')
+    const hours = date.getHours().toString().padStart(2, "0")
+    const minutes = date.getMinutes().toString().padStart(2, "0")
     const day = date.getDate()
     const month = date.getMonth() + 1 
 

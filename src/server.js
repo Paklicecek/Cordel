@@ -1,28 +1,28 @@
-import express from 'express';
-import { createServer } from 'http';
-import { Server } from 'socket.io';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import dotenv from "dotenv";
+import express from "express"
+import { createServer } from "http"
+import { Server } from "socket.io"
+import path from "path"
+import { fileURLToPath } from "url"
+import dotenv from "dotenv"
 import bcrypt from "bcryptjs"
-import * as db from './config/db.js'
+import * as db from "./config/db.js"
 
-dotenv.config();
-
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+dotenv.config()
 
 
-const app = express();
-const httpServer = createServer(app);
-const io = new Server(httpServer);
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
+
+const app = express()
+const httpServer = createServer(app)
+const io = new Server(httpServer)
 
 app.use(express.json())
-app.use(express.static(path.join(__dirname, '../public')))
+app.use(express.static(path.join(__dirname, "../public")))
 
 // REGISTER
-app.post('/api/signup',async (req, res) =>{
+app.post("/api/signup",async (req, res) =>{
     const { user,email,password } = req.body
     try{
         if(user.length < 3 || password.length < 6){
@@ -40,16 +40,16 @@ app.post('/api/signup',async (req, res) =>{
     catch(err){
         console.log(err)
         //Error for duplicities (UNIQUE ON THE DB)
-        if (err.code === '23505') {
+        if (err.code === "23505") {
             // Change error displaying on the site
             return res.json({ short: true, error: "Username or email is already taken." })
         }
-        return res.status(500).json({ error: "Database error" });
+        return res.status(500).json({ error: "Database error" })
     }
 })
 // LOGIN
-app.post('/api/signin', async (req, res) =>{
-    const { user,password } = req.body;
+app.post("/api/signin", async (req, res) =>{
+    const { user,password } = req.body
     try{
         if(user.length < 3 || password.length < 6){
         return res.json({ok: false, short: true , error: "Username or password is too short."})
@@ -77,7 +77,7 @@ app.post('/api/signin', async (req, res) =>{
             })
         } 
         else {
-            return res.json({ ok: false, error: "Wrong password" });
+            return res.json({ ok: false, error: "Wrong password" })
         }
     }
     catch(err){ 
@@ -94,7 +94,7 @@ async function updateUsersList() {
     const onlineNames = Object.values(onlineUsers)
     const offlineNames = allUsers.filter(user => !onlineNames.includes(user))
 
-    io.emit('updateUserList', { online: onlineNames, offline: offlineNames })
+    io.emit("updateUserList", { online: onlineNames, offline: offlineNames })
 }
 
 io.on("connection", async (socket) => {
@@ -103,7 +103,7 @@ io.on("connection", async (socket) => {
         onlineUsers[socket.id] = username
         updateUsersList()
     })
-    socket.on('disconnect', () => {
+    socket.on("disconnect", () => {
         delete onlineUsers[socket.id]
         updateUsersList()
     })
@@ -114,10 +114,10 @@ io.on("connection", async (socket) => {
             FROM messages 
             JOIN users ON messages.user_id = users.id 
             ORDER BY messages.created_at ASC 
-        `);
+        `)
 
         result.rows.forEach(row => {
-            socket.emit('chatMessage', {
+            socket.emit("chatMessage", {
                 user: row.username,  
                 msg: row.content,
                 time: row.created_at
@@ -129,7 +129,7 @@ io.on("connection", async (socket) => {
         console.error("Error with loading:", err)
     }
 
-    socket.on('chatMessage', async (data) => {
+    socket.on("chatMessage", async (data) => {
         try {
             const userResult = await db.query(
                 'SELECT id FROM users WHERE username = $1',
@@ -143,7 +143,7 @@ io.on("connection", async (socket) => {
                     'INSERT INTO messages (user_id, content) VALUES ($1, $2)',
                     [userId, data.msg]
                 )
-                io.emit('chatMessage', {
+                io.emit("chatMessage", {
                     user: data.user,
                     msg: data.msg,
                     time: new Date() 
