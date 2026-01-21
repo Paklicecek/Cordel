@@ -84,20 +84,60 @@ app.post('/api/signin', async (req, res) =>{
         console.log(err)
     }
 })
-io.on('connection', (socket) => {
-    console.log('⚡ Někdo se připojil do chatu!')
+io.on('connection', async (socket) => {
+    try {
+        const result = await db.query(`
+            SELECT messages.content, users.username, messages.created_at 
+            FROM messages 
+            JOIN users ON messages.user_id = users.id 
+            ORDER BY messages.created_at ASC 
+        `);
 
-    socket.on('chatMessage', (msg) => {
-        io.emit('chatMessage', msg)
+        result.rows.forEach(row => {
+            socket.emit('chatMessage', {
+                user: row.username,  
+                msg: row.content,
+                time: row.created_at
+            })
+        })
+
+    } 
+    catch (err) {
+        console.error("Error with loading:", err)
+    }
+
+    socket.on('chatMessage', async (data) => {
+        try {
+            const userResult = await db.query(
+                'SELECT id FROM users WHERE username = $1',
+                [data.user]
+            )
+            
+            if (userResult.rows.length > 0) {
+                const userId = userResult.rows[0].id
+
+                await db.query(
+                    'INSERT INTO messages (user_id, content) VALUES ($1, $2)',
+                    [userId, data.msg]
+                )
+                io.emit('chatMessage', {
+                    user: data.user,
+                    msg: data.msg,
+                    time: new Date() 
+                })
+            }
+        } catch (err) {
+            console.error("Error while sending a message:", err)
+        }
     })
 
     socket.on('disconnect', () => {
-        console.log('Někdo odešel.')
+        console.log('Somebody left.')
     })
 })
 
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000
 httpServer.listen(PORT, () => {
-    console.log(`🚀 Server běží na portu ${PORT}`);
-});
+    console.log(`🚀 Server is running on port ${PORT}`)
+})

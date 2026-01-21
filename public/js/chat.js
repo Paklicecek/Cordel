@@ -11,8 +11,6 @@ if(!currentUser){
     window.location.href = "../index.html"
 }
 
-
-
 chatForm.addEventListener('submit', (e) => {
     e.preventDefault()
 
@@ -35,9 +33,17 @@ socket.on('chatMessage', (data) => {
 })
 
 function outputMessage(data) {
-    const div = document.createElement('div');
-    div.classList.add('message');
-    
+    const div = document.createElement('div')
+    div.classList.add('message')
+
+    const date = new Date(data.time || Date.now())
+    const hours = date.getHours().toString().padStart(2, '0')
+    const minutes = date.getMinutes().toString().padStart(2, '0')
+    const day = date.getDate()
+    const month = date.getMonth() + 1 
+
+    const formattedTime = `${day}.${month}. ${hours}:${minutes}`
+
     div.innerHTML = `
         <div class="avatar-wrapper">
             <img src="../img/pfps/test.gif" alt="Avatar">
@@ -45,7 +51,7 @@ function outputMessage(data) {
         <div class="message-content">
             <div class="message-header">
                 <span class="username">${data.user}</span>
-                <span class="timestamp">${new Date().toLocaleTimeString()}</span>
+                <span class="timestamp">${formattedTime}</span>
             </div>
             <p class="text">${data.msg}</p>
         </div>
