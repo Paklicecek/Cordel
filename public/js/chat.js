@@ -4,6 +4,7 @@ const messagesContainer = document.querySelector(".messages-container")
 const chatForm = document.querySelector(".message-form")
 const messageInput = document.getElementById('messageInput')
 const sidebar = document.querySelector(".user-sidebar")
+const usersListContainer = document.getElementById("users-list")
 
 const currentUser = localStorage.getItem("user")
 const id = localStorage.getItem("ID")
@@ -32,7 +33,7 @@ chatForm.addEventListener('submit', (e) => {
 
 socket.emit("join", currentUser)
 socket.on('updateUserList', ({ online, offline }) => {
-    sidebar.innerHTML = ''
+    usersListContainer.innerHTML = ''
 
     const createGroup = (title, users, isOnline) => {
         if (users.length === 0) return
@@ -68,7 +69,7 @@ socket.on('updateUserList', ({ online, offline }) => {
             userItem.appendChild(span)
             groupDiv.appendChild(userItem)
         })
-        sidebar.appendChild(groupDiv)
+        usersListContainer.appendChild(groupDiv)
     }
 
     createGroup('ONLINE', online, true);

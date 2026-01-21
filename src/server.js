@@ -88,8 +88,8 @@ app.post('/api/signin', async (req, res) =>{
 const onlineUsers = {}
 
 async function updateUsersList() {
-    const rows = await db.query('SELECT username FROM users')
-    const allUsers = rows.map(r => r.username)
+    const result = await db.query('SELECT username FROM users')
+    const allUsers = result.rows.map(r => r.username)
 
     const onlineNames = Object.values(onlineUsers)
     const offlineNames = allUsers.filter(user => !onlineNames.includes(user))
