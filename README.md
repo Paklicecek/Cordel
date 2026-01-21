@@ -52,4 +52,4 @@ Initially designed as a simple polling-based chat, the project has been upgraded
 ## 📝 Future Improvements
 * Add dynamic profile pictures (currently using placeholders).
 * Implement private messaging rooms.
-* Add message timestamp formatting customization.
+* Add option to remove or edit your message.
