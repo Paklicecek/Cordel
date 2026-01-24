@@ -7,6 +7,7 @@ const form = document.querySelector(".form")
 const userInput = document.getElementById("usernameInput")
 const passwordInput = document.getElementById("passwordInput")
 const subtitle = document.querySelector(".subtitle")
+const checkbox = document.querySelector(".checkbox")
 
 function addEmailInput() {
     if (document.getElementById("emailInput")) return
@@ -75,7 +76,12 @@ form.addEventListener("submit", async (event) => {
     if (!result.short && result.ok) {
         localStorage.setItem("user", result.user.username)
         localStorage.setItem("ID", result.user.id)
-
+        if(checkbox.checked){
+            localStorage.setItem("checked", "true")
+        }
+        else{
+            localStorage.removeItem("checked")
+        }
         window.location.href = "../chat.html"
     } else {
         if(result.error){
@@ -87,6 +93,10 @@ form.addEventListener("submit", async (event) => {
 const resetSubtitle = () => {
     subtitle.textContent = "Sign in to your account or create a new one"
     subtitle.style.color = "var(--text-gray)"
+}
+if(localStorage.getItem("checked") === "true"){
+    userInput.value = localStorage.getItem("user") || ""
+    if(checkbox) checkbox.checked = true
 }
 userInput.addEventListener("input", resetSubtitle)
 passwordInput.addEventListener("input", resetSubtitle)
