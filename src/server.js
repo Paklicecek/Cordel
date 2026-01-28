@@ -32,8 +32,8 @@ app.post("/api/signup",async (req, res) =>{
         const hash = await bcrypt.hash(password, 10)
 
         await db.query(
-            'INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3)', 
-            [user, email, hash]
+            'INSERT INTO users (username, email, password_hash, is_admin) VALUES ($1, $2, $3, $4)', 
+            [user, email, hash, false]
         )
         return res.json({ short: false, message: "Account was succesfully created." })
     }
@@ -72,7 +72,8 @@ app.post("/api/signin", async (req, res) =>{
                 message: "Logged in successfully.",
                 user:{
                     id: foundUser.id,
-                    username:foundUser.username
+                    username:foundUser.username,
+                    isAdmin: foundUser.is_admin
                 }
             })
         } 
@@ -88,13 +89,22 @@ app.post("/api/signin", async (req, res) =>{
 const onlineUsers = {}
 
 async function updateUsersList() {
-    const result = await db.query('SELECT username FROM users')
-    const allUsers = result.rows.map(r => r.username)
+    const result = await db.query('SELECT username, is_admin FROM users')
+    const allUsers = result.rows 
 
-    const onlineNames = Object.values(onlineUsers)
-    const offlineNames = allUsers.filter(user => !onlineNames.includes(user))
+    const onlineUsernames = Object.values(onlineUsers)
+    const online = []
+    const offline = []
 
-    io.emit("updateUserList", { online: onlineNames, offline: offlineNames })
+    allUsers.forEach(user => {
+        if (onlineUsernames.includes(user.username)) {
+            online.push(user)
+        } else {
+            offline.push(user)
+        }
+    })
+
+    io.emit("updateUserList", { online, offline})
 }
 
 io.on("connection", async (socket) => {
@@ -107,10 +117,10 @@ io.on("connection", async (socket) => {
         delete onlineUsers[socket.id]
         updateUsersList()
     })
-
+    // Loading messages from DB 
     try {
         const result = await db.query(`
-            SELECT messages.content, users.username, messages.created_at 
+            SELECT messages.content, users.username, users.is_admin, messages.created_at 
             FROM messages 
             JOIN users ON messages.user_id = users.id 
             ORDER BY messages.created_at ASC 
@@ -118,7 +128,8 @@ io.on("connection", async (socket) => {
 
         result.rows.forEach(row => {
             socket.emit("chatMessage", {
-                user: row.username,  
+                user: row.username, 
+                isAdmin: row.is_admin, 
                 msg: row.content,
                 time: row.created_at
             })
@@ -132,7 +143,7 @@ io.on("connection", async (socket) => {
     socket.on("chatMessage", async (data) => {
         try {
             const userResult = await db.query(
-                'SELECT id FROM users WHERE username = $1',
+                'SELECT id,is_admin FROM users WHERE username = $1',
                 [data.user]
             )
             
@@ -145,6 +156,7 @@ io.on("connection", async (socket) => {
                 )
                 io.emit("chatMessage", {
                     user: data.user,
+                    isAdmin: userResult.rows[0].is_admin,
                     msg: data.msg,
                     time: new Date() 
                 })

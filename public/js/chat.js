@@ -8,9 +8,13 @@ const usersListContainer = document.getElementById("users-list")
 const usernameBox = document.querySelector(".my-username")
 
 const currentUser = localStorage.getItem("user")
+const isAdmin = localStorage.getItem("admin")
 const id = localStorage.getItem("ID")
 
 usernameBox.textContent = currentUser
+if(isAdmin){
+    usernameBox.classList.add = "admin"
+}
 
 if(!currentUser){
     window.location.href = "../index.html"
@@ -62,10 +66,16 @@ socket.on("updateUserList", ({ online, offline }) => {
             const img = document.createElement("img")
             img.src = "img/pfps/test.gif"
             img.alt = user
-
-            const span = document.createElement("span")
-            span.className = "username"
-            span.textContent = user
+            if(user.is_admin === true){
+                const span = document.createElement("span")
+                span.className = "username admin"
+                span.textContent = user.username
+            }
+            else{
+                const span = document.createElement("span")
+                span.className = "username"
+                span.textContent = user.username 
+            }
 
             avatarWrapper.appendChild(img)
             userItem.appendChild(avatarWrapper)
@@ -95,19 +105,33 @@ function displayMessage(data) {
     const month = date.getMonth() + 1 
 
     const formattedTime = `${day}.${month}. ${hours}:${minutes}`
-
-    div.innerHTML = `
+    if(data.isAdmin === true){
+        div.innerHTML = `
         <div class="avatar-wrapper">
             <img src="img/pfps/test.gif" alt="Avatar">
         </div>
         <div class="message-content">
             <div class="message-header">
-                <span class="username">${data.user}</span>
+                <span class="username admin">${data.user}</span>
                 <span class="timestamp">${formattedTime}</span>
             </div>
             <p class="text">${data.msg}</p>
         </div>
     `
-    
+    }
+    else{
+        div.innerHTML = `
+            <div class="avatar-wrapper">
+                <img src="img/pfps/test.gif" alt="Avatar">
+            </div>
+            <div class="message-content">
+                <div class="message-header">
+                    <span class="username">${data.user}</span>
+                    <span class="timestamp">${formattedTime}</span>
+                </div>
+                <p class="text">${data.msg}</p>
+            </div>
+        `
+    }
     messagesContainer.appendChild(div)
 }

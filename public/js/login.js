@@ -76,6 +76,7 @@ form.addEventListener("submit", async (event) => {
     if (!result.short && result.ok) {
         localStorage.setItem("user", result.user.username)
         localStorage.setItem("ID", result.user.id)
+        localStorage.setItem("admin", result.user.admin)
         if(checkbox.checked){
             localStorage.setItem("checked", "true")
         }
