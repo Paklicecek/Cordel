@@ -31,9 +31,6 @@ body {
     font-family: 'Inter', sans-serif;
     display: block; 
 }
-.admin{
-    color: rgb(169, 31, 31);
-}
 .app-layout {
     display: flex;
     flex-direction: column; 
@@ -370,4 +367,7 @@ body {
         width: 20px;
         height: 20px;
     }
+}
+.admin{
+    color: rgb(169, 31, 31) !important; 
 }

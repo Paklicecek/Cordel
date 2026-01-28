@@ -12,7 +12,7 @@ const isAdmin = localStorage.getItem("admin")
 const id = localStorage.getItem("ID")
 
 usernameBox.textContent = currentUser
-if(isAdmin){
+if(isAdmin === "true"){
     usernameBox.classList.add("admin")
 }
 
