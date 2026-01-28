@@ -13,7 +13,7 @@ const id = localStorage.getItem("ID")
 
 usernameBox.textContent = currentUser
 if(isAdmin){
-    usernameBox.classList.add = "admin"
+    usernameBox.classList.add("admin")
 }
 
 if(!currentUser){
@@ -65,16 +65,15 @@ socket.on("updateUserList", ({ online, offline }) => {
 
             const img = document.createElement("img")
             img.src = "img/pfps/test.gif"
-            img.alt = user
+            img.alt = user.username
+
+            const span = document.createElement("span")
+            span.textContent = user.username
             if(user.is_admin === true){
-                const span = document.createElement("span")
                 span.className = "username admin"
-                span.textContent = user.username
             }
             else{
-                const span = document.createElement("span")
                 span.className = "username"
-                span.textContent = user.username 
             }
 
             avatarWrapper.appendChild(img)
