@@ -129,7 +129,8 @@ io.on("connection", async (socket) => {
         result.rows.forEach(row => {
             socket.emit("chatMessage", {
                 user: row.username, 
-                isAdmin: row.is_admin, 
+                isAdmin: row.is_admin,
+                msgId: row.id, 
                 msg: row.content,
                 time: row.created_at
             })
