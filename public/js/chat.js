@@ -96,7 +96,7 @@ socket.on("chatMessage", (data) => {
 function displayMessage(data) {
     const formattedMsg = data.msg.replace(
         /(https?:\/\/[^\s]+)/g, 
-        '<a href="$1" class="link" style="color: blue;">$1</a>'
+        '<a href="$1" class="link" style="color: #00A8FC; text-decoration: none;" target="_blank">$1</a>'
     )
 
     const div = document.createElement("div")
