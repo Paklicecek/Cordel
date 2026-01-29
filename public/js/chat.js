@@ -94,6 +94,10 @@ socket.on("chatMessage", (data) => {
 })
 
 function displayMessage(data) {
+    const formattedMsg = data.msg.replace(
+        /(https?:\/\/[^\s]+)/g, 
+        '<a href="$1" class="link">$1</a>'
+    )
     const div = document.createElement("div")
     div.classList.add("message")
 
@@ -128,7 +132,7 @@ function displayMessage(data) {
                     <span class="username">${data.user}</span>
                     <span class="timestamp">${formattedTime}</span>
                 </div>
-                <p class="text">${data.msg}</p>
+                <p class="text">${formattedMsg}</p>
             </div>
         `
     }
