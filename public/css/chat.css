@@ -371,3 +371,10 @@ body {
 .admin{
     color: rgb(169, 31, 31) !important; 
 }
+.link{
+   text-decoration: none;
+    
+}
+.link:hover{
+   text-decoration: underline;
+}

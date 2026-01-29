@@ -120,7 +120,7 @@ io.on("connection", async (socket) => {
     // Loading messages from DB 
     try {
         const result = await db.query(`
-            SELECT messages.content, users.username, users.is_admin, messages.created_at 
+            SELECT messages.id, messages.content, users.username, users.is_admin, messages.created_at 
             FROM messages 
             JOIN users ON messages.user_id = users.id 
             ORDER BY messages.created_at ASC 
