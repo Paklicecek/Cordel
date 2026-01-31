@@ -146,7 +146,7 @@ messagesContainer.addEventListener("click", (e) => {
         const deleteMsg = e.target.closest(".message")
         const msgId = deleteMsg.id.split("-")[1]
     
-        const msgOwner = document.querySelector(".username").textContent
+        const msgOwner = deleteMsg.querySelector(".username").textContent
         if(isAdmin === "true") socket.emit("deleteMessage", msgId)
         else if(msgOwner === currentUser) socket.emit("deleteMessage", msgId)
         else alert("You can only delete your own messages!")
