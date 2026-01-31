@@ -152,6 +152,7 @@ body {
                                 width:16px;
                                 height:16px;
                                 cursor: pointer;
+                                transition: 0.3s all;
                                 &:hover{
                                     filter: brightness(0) invert(1);
                                 }
