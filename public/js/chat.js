@@ -19,9 +19,6 @@ if(isAdmin === "true"){
 if(!currentUser){
     window.location.href = "../index.html"
 }
-// broken delete functionality
-// fix later
-
 chatForm.addEventListener("submit", (e) => {
     e.preventDefault()
 
@@ -119,6 +116,7 @@ function displayMessage(data) {
             <div class="message-header">
                 <span class="username admin">${data.user}</span>
                 <span class="timestamp">${formattedTime}</span>
+                <img src="img/icons/trash.png" alt="Delete" class="delete-btn"/>
             </div>
             <p class="text">${formattedMsg}</p>
         </div>
@@ -133,6 +131,7 @@ function displayMessage(data) {
                 <div class="message-header">
                     <span class="username">${data.user}</span>
                     <span class="timestamp">${formattedTime}</span>
+                    <img src="img/icons/trash.png" alt="Delete" class="delete-btn"/>
                 </div>
                 <p class="text">${formattedMsg}</p>
             </div>
@@ -141,3 +140,22 @@ function displayMessage(data) {
     div.id = `msg-${data.msgId}`
     messagesContainer.appendChild(div)
 }
+
+messagesContainer.addEventListener("click", (e) => {
+    if(e.target.classList.contains("delete-btn")) {
+        const deleteMsg = e.target.closest(".message")
+        const msgId = deleteMsg.id.split("-")[1]
+    
+        const msgOwner = document.querySelector(".username").textContent
+        if(isAdmin === "true") socket.emit("deleteMessage", msgId)
+        else if(msgOwner === currentUser) socket.emit("deleteMessage", msgId)
+        else alert("You can only delete your own messages!")
+    }
+})
+socket.on("deleteMessage", (msgId) => {
+    const messageDiv = document.getElementById(`msg-${msgId}`)
+
+    if (messageDiv) {
+        messageDiv.remove()
+    }
+})
