@@ -76,15 +76,18 @@ form.addEventListener("submit", async (event) => {
     if (!result.short && result.ok) {
         localStorage.setItem("user", result.user.username)
         localStorage.setItem("ID", result.user.id)
-        localStorage.setItem("admin", result.user.admin)
+        localStorage.setItem("admin", result.user.isAdmin)
+
         if(checkbox.checked){
             localStorage.setItem("checked", "true")
         }
         else{
             localStorage.removeItem("checked")
         }
+
         window.location.href = "../chat.html"
-    } else {
+    } 
+    else {
         if(result.error){
             subtitle.textContent = result.error
             subtitle.style.color = "#ff4b4b"

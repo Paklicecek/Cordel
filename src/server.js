@@ -169,6 +169,7 @@ io.on("connection", async (socket) => {
     })
     socket.on("deleteMessage", async (msgId) => {
         try {
+            if (!msgId) return
             await db.query(
                 'DELETE FROM messages WHERE id = $1',
                 [msgId]
