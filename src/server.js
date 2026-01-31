@@ -151,19 +151,32 @@ io.on("connection", async (socket) => {
             if (userResult.rows.length > 0) {
                 const userId = userResult.rows[0].id
 
-                await db.query(
-                    'INSERT INTO messages (user_id, content) VALUES ($1, $2)',
+                const result = await db.query(
+                    'INSERT INTO messages (user_id, content) VALUES ($1, $2) RETURNING id',
                     [userId, data.msg]
                 )
                 io.emit("chatMessage", {
                     user: data.user,
                     isAdmin: userResult.rows[0].is_admin,
+                    msgId: result.rows[0].id,
                     msg: data.msg,
-                    time: new Date() 
+                    time: new Date()
                 })
             }
         } catch (err) {
             console.error("Error while sending a message:", err)
+        }
+    })
+    socket.on("deleteMessage", async (msgId) => {
+        try {
+            await db.query(
+                'DELETE FROM messages WHERE id = $1',
+                [msgId]
+            )
+            io.emit("deleteMessage", msgId)
+        } 
+        catch (err) {
+            console.error("Error while deleting a message:", err)
         }
     })
 })

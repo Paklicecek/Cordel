@@ -21,18 +21,7 @@ if(!currentUser){
 }
 // broken delete functionality
 // fix later
-deleteBtn.addEventListener("click", () => {
-    if(isAdmin !== "true") return
-    const deleteBtn = document.querySelector(".delete-btn")
-    const deleteMsg = deleteBtn.closest(".message")
-    const msgId = deleteMsg.id.split("-")[1]
 
-
-    if (deleteMsg) {
-        deleteMsg.remove()
-    }
-
-})
 chatForm.addEventListener("submit", (e) => {
     e.preventDefault()
 
