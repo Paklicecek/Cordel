@@ -178,6 +178,7 @@ input:focus {
     gap: 8px;
     cursor: pointer;
     color: var(--text-gray);
+    transition: all 0.3s;
     &:hover {
         color: var(--text-white);
     }
