@@ -178,6 +178,9 @@ input:focus {
     gap: 8px;
     cursor: pointer;
     color: var(--text-gray);
+    &:hover {
+        color: var(--text-white);
+    }
 }
 
 input[type="checkbox"] {
@@ -191,6 +194,11 @@ input[type="checkbox"] {
     color: var(--text-gray);
     text-decoration: none;
     font-size: 14.5px;
+    transition: all 0.3s;
+    &:hover {
+        color: var(--text-white);
+        text-decoration: underline;
+    }
 }
 
 .sign-in-btn {
