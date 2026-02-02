@@ -1,0 +1,32 @@
+services:
+  app:
+    build:
+      context: .              
+      dockerfile: docker/Dockerfile  
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - DATABASE_URL=postgres://cordeluser:securepass@db:5432/cordel_db
+    depends_on:
+      - db
+    volumes:
+      - .:/app
+      - /app/node_modules
+
+  db:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: cordeluser
+      POSTGRES_PASSWORD: securepass
+      POSTGRES_DB: cordel_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      # Aktualizovaná cesta k init.sql
+      - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+  postgres_data:
