@@ -3,7 +3,7 @@ name: Deploy to Server
 on:
   push:
     branches:
-      - main  # Spustí se jen když pushneš do main větve
+      - main 
 
 jobs:
   deploy:
@@ -20,5 +20,5 @@ jobs:
             cd ~/Cordel
             git fetch origin main
             git reset --hard origin/main
-            npm install
+            npm ci --omit=dev
             pm2 restart cordel
