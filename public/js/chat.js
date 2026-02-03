@@ -165,7 +165,6 @@ messageInput.addEventListener("input", ()=> {
     clearTimeout(timer)
     timer = setTimeout(() => {
         socket.emit("stopTyping")
-        console.log("Stopped typing")
     }, 5000)
     
 })
@@ -176,10 +175,11 @@ socket.on("typing",(user) => {
     if(usersList.includes(user)){}
     else usersList.push(user)
     if(usersList.length >= 2) console.log("More users is typing")
-    else console.log(usersList[0] + "is typing")
+    else console.log(usersList[0] + " is typing")
 })
 socket.on("stopTyping",(user) => {
     let index = usersList.indexOf(user)
+    console.log(usersList[index] + " stopped typing")
     if(index !== -1) {
         usersList.splice(index, 1)
     }   
