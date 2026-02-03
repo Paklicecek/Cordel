@@ -17,6 +17,7 @@ const __dirname = path.dirname(__filename)
 const app = express()
 const httpServer = createServer(app)
 const io = new Server(httpServer)
+let typingUsers = []
 
 app.use(express.json())
 app.use(express.static(path.join(__dirname, "../public")))
@@ -180,8 +181,16 @@ io.on("connection", async (socket) => {
             console.error("Error while deleting a message:", err)
         }
     })
+    socket.on("typing",()=>{
+        try {
+            let username = onlineUsers[socket.id]
+            if(username) socket.broadcast.emit("typing", username)
+        } 
+        catch (err) {
+            console.error("Error while sending user that is typing:", err)
+        }
+    })
 })
-
 
 const PORT = process.env.PORT || 3000
 httpServer.listen(PORT, () => {
