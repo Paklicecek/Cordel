@@ -9,7 +9,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Připojení přes SSH a update
+      - name: Connect with SSH and update
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.HOST }}
