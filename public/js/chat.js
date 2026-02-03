@@ -161,14 +161,21 @@ socket.on("deleteMessage", (msgId) => {
 })
 messageInput.addEventListener("input", ()=> {
     socket.emit("typing")
+    
 })
+
+let timer = setTimeout(() => {
+    socket.emit("stopTyping",)
+}, 5000);
+
 let usersList = []
 socket.on("typing",(user) => {
-    console.log(user + "is typing")
-    if(usersList.includes(user)){
-        
-    }
+    if(usersList.includes(user)){}
     else usersList.push(user)
     if(usersList.length >= 2) console.log("More users is typing")
-    else console.log(user + "is typing")
+    else console.log(usersList[0] + "is typing")
+})
+socket.on("stopTyping",(user) => {
+    usersList.remove(user)
+    // Remove it from html when we add it
 })

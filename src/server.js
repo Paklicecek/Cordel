@@ -190,6 +190,15 @@ io.on("connection", async (socket) => {
             console.error("Error while sending user that is typing:", err)
         }
     })
+    socket.on("stopTyping",()=>{
+        try {
+            let username = onlineUsers[socket.id]
+            if(username) socket.broadcast.emit("stopTyping", username)
+        } 
+        catch (err) {
+            console.error("Error while sending user that stopped typing:", err)
+        }
+    })
 })
 
 const PORT = process.env.PORT || 3000
