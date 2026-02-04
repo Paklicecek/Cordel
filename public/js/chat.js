@@ -174,12 +174,17 @@ let usersList = []
 socket.on("typing",(user) => {
     if(usersList.includes(user)){}
     else usersList.push(user)
-    if(usersList.length >= 2) console.log("More users is typing")
-    else console.log(usersList[0] + " is typing")
+    if(usersList.length === 0)chatForm.setAttribute("data-label", "")
+    else if(usersList.length >= 2) chatForm.setAttribute("data-label", "More users is typing...")
+    else chatForm.setAttribute("data-label", usersList[0] + " is typing...")
 })
 socket.on("stopTyping",(user) => {
     let index = usersList.indexOf(user)
     console.log(usersList[index] + " stopped typing")
+    if(usersList[index] + " is typing..."  === chatForm.getAttribute("data-label")){
+        chatForm.setAttribute("data-label", "")
+    }
+    else if("More users is typing..."  === chatForm.getAttribute("data-label")) chatForm.setAttribute("data-label", "")
     if(index !== -1) {
         usersList.splice(index, 1)
     }   

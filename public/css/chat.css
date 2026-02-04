@@ -222,6 +222,7 @@ body {
                         display: flex;
                         gap: 18px;
                         align-items: center;
+                        position: relative;
 
                         .input-wrapper {
                             flex: 1;
@@ -242,6 +243,15 @@ body {
                                 outline: none;
                             }
                         }
+                    }
+                    .message-form::before{
+                        content: attr(data-label);
+                        position: absolute;
+                        left: 14px;
+                        bottom: 2.8rem;
+                        font-size: 12.5px;
+                        color: #757575;
+                        pointer-events: none;
                     }
                 }
             }
