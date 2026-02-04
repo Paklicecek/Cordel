@@ -27,7 +27,6 @@ app.post("/api/signup",async (req, res) =>{
     const { user,email,password } = req.body
     try{
         if(user.length < 3 || password.length < 6){
-        // Change error displaying on the site
         return res.json({short: true , error: "Username or password is too short."})
         }
         const hash = await bcrypt.hash(password, 10)
@@ -42,7 +41,6 @@ app.post("/api/signup",async (req, res) =>{
         console.log(err)
         //Error for duplicities (UNIQUE ON THE DB)
         if (err.code === "23505") {
-            // Change error displaying on the site
             return res.json({ short: true, error: "Username or email is already taken." })
         }
         return res.status(500).json({ error: "Database error" })
