@@ -172,8 +172,9 @@ messageInput.addEventListener("input", ()=> {
 
 let usersList = []
 socket.on("typing",(user) => {
-    if(usersList.includes(user)){}
-    else usersList.push(user)
+    if(!usersList.includes(user)){
+        usersList.push(user)
+    }
     if(usersList.length === 0)chatForm.setAttribute("data-label", "")
     else if(usersList.length >= 2) chatForm.setAttribute("data-label", "More users is typing...")
     else chatForm.setAttribute("data-label", usersList[0] + " is typing...")
