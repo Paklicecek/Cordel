@@ -38,7 +38,7 @@ app.post("/api/signup",async (req, res) =>{
         return res.json({ short: false, message: "Account was succesfully created." })
     }
     catch(err){
-        console.log(err)
+        console.error("Auth Error: " + err)
         //Error for duplicities (UNIQUE ON THE DB)
         if (err.code === "23505") {
             return res.json({ short: true, error: "Username or email is already taken." })
