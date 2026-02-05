@@ -190,3 +190,4 @@ socket.on("stopTyping",(user) => {
         usersList.splice(index, 1)
     }   
 })
+messageInput.focus
