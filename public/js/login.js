@@ -16,7 +16,7 @@ function addEmailInput() {
     emailGroup.id = "emailGroup"
     emailGroup.innerHTML = `
         <label for="emailInput">Email</label>
-        <input type="email" name="email" id="emailInput" placeholder="Enter your email">
+        <input type="email" name="email" id="emailInput" placeholder="Enter your email" required>
     `
     form.insertBefore(emailGroup, passwordInput.closest(".input-group"))
 }
