@@ -78,5 +78,56 @@
         </div>
     </div>
 
+    <!-- AI generated settings pop up -->
+    <!-- Rewrite the inner html and fix styling issues -->
+    <div id="settingsOverlay" class="modal-overlay">
+        <div class="modal-content">
+            
+            <div class="modal-header">
+                <h2>User Settings</h2>
+                <button id="closeSettingsBtn" class="close-modal-btn">
+                    <i class="ph ph-x"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                
+                <div class="settings-section center">
+                    <div class="pfp-upload-wrapper">
+                        <img src="img/pfps/test.gif" alt="Current PFP" id="settingsPfpPreview">
+                        <div class="pfp-overlay">
+                            <i class="ph ph-camera"></i>
+                        </div>
+                    </div>
+                    <p class="username-label" id="settingsUsernameLabel">Username</p>
+                </div>
+
+                <div class="settings-form">
+                    <div class="input-group">
+                        <label>Display Name</label>
+                        <input type="text" id="settingsUsername" class="dark-input" placeholder="New username">
+                    </div>
+
+                    <div class="input-group">
+                        <label>New Password</label>
+                        <input type="password" id="settingsPassword" class="dark-input" placeholder="Leave empty to keep current">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Current Password (Required)</label>
+                        <input type="password" id="settingsCurrentPassword" class="dark-input" placeholder="Verify to save changes">
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button id="cancelSettingsBtn" class="btn-ghost">Cancel</button>
+                <button id="saveSettingsBtn" class="btn-primary">Save Changes</button>
+            </div>
+
+        </div>
+    </div>
+    
 </body>
 </html>
