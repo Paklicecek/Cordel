@@ -1,55 +1,62 @@
-# Cordel - Real-time Chat Application
+# Cordel
 
-Cordel is a web-based messaging application built to demonstrate **full-stack development** principles using **Node.js** and **PostgreSQL**.
+A real-time chat application inspired by Discord, built with the PERN stack (PostgreSQL, Express, React-like vanilla JS, Node.js) and Socket.io.
 
-Initially designed as a simple polling-based chat, the project has been upgraded to use **Socket.io** for bi-directional, real-time communication. It features user authentication, live presence tracking (Online/Offline users), and persistent message storage.
+> **Note from Developer:** > This project has reached its final state for now. The development took longer than expected, and I decided to wrap it up to focus on new challenges. I have removed some unfinished features to keep the codebase clean and functional. I might return to this project in the future to implement the missing parts, but for now, this is the final product.
 
 ## 🚀 Features
-* **Real-time Messaging:** Instant message delivery using WebSockets (no page refresh required).
-* **User Authentication:** Secure Sign Up and Login system using `bcrypt` for password hashing.
-* **Live User Status:** Sidebar automatically updates to show who is currently Online or Offline.
-* **Persistent Data:** All users and messages are stored in a **PostgreSQL** database.
+
+* **Real-time Messaging:** Instant message delivery using Socket.io.
+* **User Authentication:** Secure Signup and Login system with password hashing (bcrypt).
+* **Random Avatars:** Automatic generation of unique user avatars via DiceBear API based on username seeds.
+* **Live Status:** See who is Online and Offline in real-time.
+* **Typing Indicators:** See when other users are typing.
+* **Message History:** Persistent chat history stored in PostgreSQL.
+* **Admin Privileges:** Admins can delete any message (Users can delete their own).
 
 ## 🛠️ Tech Stack
+
 * **Backend:** Node.js, Express
 * **Real-time Engine:** Socket.io
-* **Database:** PostgreSQL (`pg` library)
+* **Database:** PostgreSQL
 * **Frontend:** Vanilla JavaScript, HTML5, CSS3
+* **Containerization:** Docker & Docker Compose
+
+## 🔮 Planned / Removed Features
+
+These features were originally planned but were removed or postponed to finalize the project:
+
+1.  **Settings Pop-up:** Ability to change password, profile picture, username, and view account stats.
+2.  **Forgot Password:** Password recovery page.
+3.  **Mobile Responsivity:** Full optimization for mobile devices.
+4.  **Desktop App:** Wrapping the application as an Electron app.
 
 ## 📦 How to Run
 
-1.  **Clone the repository**
+### Prerequisites
+* Docker Desktop installed
+
+### Installation
+
+1.  Clone the repository:
     ```bash
-    git clone [https://github.com/Paklicecek/Cordel.git](https://github.com/Paklicecek/Cordel.git)
+    git clone [https://github.com/Paklicek/Cordel.git](https://github.com/Paklicek/Cordel.git)
     cd Cordel
     ```
 
-2.  **Install dependencies**
-    ```bash
-    npm install
-    ```
-
-3.  **Database Setup**
-    Ensure you have PostgreSQL installed and running.
-    * Create a database named `cordel_db`.
-    * Import the schema (tables `users` and `messages`) or run the SQL setup commands.
-
-4.  **Environment Variables**
-    Create a `.env` file in the root directory:
-    ```env
+2.  Create `.env` file (optional, defaults are set in docker-compose):
+    ```ini
     PORT=3000
-    DATABASE_URL=postgres://user:password@localhost:5432/cordel_db
+    DATABASE_URL=postgres://cordel_dev:password@db:5432/cordel_db
     ```
 
-5.  **Start the server**
+3.  Run with Docker:
     ```bash
-    npm start
+    docker-compose up --build
     ```
 
-6.  **Open in Browser**
-    Visit `http://localhost:3000`
+4.  Open your browser and visit:
+    `http://localhost:3000`
 
-## 📝 Future Improvements
-* Add dynamic profile pictures (currently using placeholders).
-* Implement private messaging rooms.
-* Add option to remove or edit your message.
+---
+*Created by Paklicek*
