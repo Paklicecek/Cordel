@@ -19,7 +19,7 @@ if(isAdmin === "true"){
 if(!currentUser){
     window.location.href = "../index.html"
 }
-chatForm.addEventListener("submit", (e) => {
+chatForm.addEventListener("submit", async (e) => {
     e.preventDefault()
 
     const msg = messageInput.value
@@ -30,6 +30,32 @@ chatForm.addEventListener("submit", (e) => {
     const messageData = {
         user: currentUser,
         msg: msg
+    }
+    if(isAdmin == "true"){
+        if(msg.includes("/admin")){
+            const userName = msg.split("/admin")[1].trim()
+            if(!userName) return
+            
+            try{
+                const response = await fetch("/api/setAdmin", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({toSetAdmin: userName})
+                })
+        
+                const result = await response.json()
+                console.log(result.message)
+                console.log("This change may take some time please reload your window to see changes.")
+                
+                messageInput.value = ""
+                return
+            }
+            catch (err) {
+                console.error("Admin error:", err)
+            }
+        }
     }
     socket.emit("chatMessage", messageData)
     messageInput.value = ""

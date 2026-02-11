@@ -84,6 +84,26 @@ app.post("/api/signin", async (req, res) =>{
         console.log(err)
     }
 })
+app.post("/api/setAdmin",async (req, res) =>{
+    const { toSetAdmin } = req.body
+    try {
+        const result = await db.query(
+            'UPDATE users SET is_admin = true WHERE username = $1', 
+            [toSetAdmin]
+        )
+
+        if (result.rowCount > 0) {
+            return res.json({ ok: true, message: "User was successfully admined." })
+        } 
+        else {
+            return res.json({ ok: false, message: "User doesn't exist." })
+        }
+    }
+    catch (err) {
+        console.error("Error: " + err)
+        return res.status(500).json({ error: "Database error" })
+    }
+})
 
 const onlineUsers = {}
 
