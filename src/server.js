@@ -27,7 +27,7 @@ app.post("/api/signup",async (req, res) =>{
     const { user,email,password } = req.body
     try{
         if(user.length < 3 || password.length < 6){
-        return res.json({short: true , error: "Username or password is too short."})
+        return res.json({ok: false, short: true , error: "Username or password is too short."})
         }
         const hash = await bcrypt.hash(password, 10)
 
@@ -35,7 +35,7 @@ app.post("/api/signup",async (req, res) =>{
             'INSERT INTO users (username, email, password_hash, is_admin) VALUES ($1, $2, $3, $4)', 
             [user, email, hash, false]
         )
-        return res.json({ short: false, message: "Account was succesfully created." })
+        return res.json({ok: true, short: false, message: "Account was succesfully created." })
     }
     catch(err){
         console.error("Auth Error: " + err)

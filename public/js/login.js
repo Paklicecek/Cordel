@@ -72,7 +72,18 @@ form.addEventListener("submit", async (event) => {
     })
 
     const result = await response.json()
-
+    if(result.message === "Account was succesfully created."){
+        glider.style.transform = "translateX(0)"
+        
+        formTitle.textContent = "Welcome Back"
+        submitBtn.value = "Sign In"
+        
+        loginBtn.classList.add("active")
+        signupBtn.classList.remove("active")
+        removeEmailInput()
+        subtitle.textContent = result.message
+        subtitle.style.color = "#50d557"
+    }
     if (!result.short && result.ok) {
         localStorage.setItem("user", result.user.username)
         localStorage.setItem("ID", result.user.id)
