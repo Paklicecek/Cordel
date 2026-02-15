@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cordel - Account Recovery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    .back-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding: 12px;
+        margin-top: 12px;
+        border: 1px solid var(--input-border); /* Matches your input borders */
+        border-radius: 12px;
+        background: transparent;
+        color: var(--text-gray);
+        font-size: 14.5px;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .back-btn:hover {
+        border-color: var(--text-gray);
+        color: var(--text-white);
+        background-color: rgba(255, 255, 255, 0.03);
+    }
+
+    .back-btn:active {
+        transform: scale(0.95);
+        opacity: 0.8;
+    }
+
+    .back-btn svg {
+        margin-right: 8px;
+        fill: currentColor;
+        transition: transform 0.2s ease;
+    }
+
+    .back-btn:hover svg {
+        transform: translateX(-4px); 
+    }
+
+    .recovery-container {
+        padding-bottom: 32px;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="header-content">
+        <img src="img/logo.png" alt="Cordel Logo" class="logo">
+        <h1>Cordel</h1>
+        <p id="slug">Account Recovery</p>
+    </div>
+
+    <div class="container recovery-container">
+        <h2>Forgot Password?</h2>
+        <p class="subtitle">Enter your email to receive a 6-digit verification code.</p>
+
+        <form action="" method="post" id="recoveryForm" class="form">
+          
+            <div class="input-group">
+                <label for="emailInput">Email Address</label>
+                <input type="email" name="email" id="emailInput" placeholder="name@example.com" required>
+            </div>
+
+            <div class="input-group">
+                <label for="codeInput">Verification Code</label>
+                <input type="text" name="code" id="codeInput" placeholder="Enter 6-digit code" maxlength="6" autocomplete="off">
+            </div>
+
+            <input type="submit" value="Send Code" class="sign-in-btn" id="verifyBtn">
+      
+        </form>
+
+        <a href="index.html" class="back-btn">
+            <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                <path d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+            </svg>
+            Back to Login
+        </a>
+    </div>
+
+    <p id="tos">Help: cordel.chat@gmail.com</p>
+
+  </main>
+</body>
+</html>
