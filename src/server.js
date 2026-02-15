@@ -17,7 +17,6 @@ const __dirname = path.dirname(__filename)
 const app = express()
 const httpServer = createServer(app)
 const io = new Server(httpServer)
-let typingUsers = []
 
 app.use(express.json())
 app.use(express.static(path.join(__dirname, "../public")))
@@ -103,6 +102,9 @@ app.post("/api/setAdmin",async (req, res) =>{
         console.error("Error: " + err)
         return res.status(500).json({ error: "Database error" })
     }
+})
+app.post("/api/forgotPass",async (req, res) =>{
+
 })
 
 const onlineUsers = {}

@@ -10,45 +10,46 @@
     
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/forgot.css">
+    <script src="js/forgot.js" defer></script>
 </head>
 <body>
-  <main>
-    <div class="header-content">
-        <img src="img/logo.png" alt="Cordel Logo" class="logo">
-        <h1>Cordel</h1>
-        <p id="slug">Account Recovery</p>
-    </div>
+    <main>
+        <div class="header-content">
+            <img src="img/logo.png" alt="Cordel Logo" class="logo">
+            <h1>Cordel</h1>
+            <p id="slug">Account Recovery</p>
+        </div>
 
-    <div class="container recovery-container">
-        <h2>Forgot Password?</h2>
-        <p class="subtitle">Enter your email to receive a 6-digit verification code.</p>
+        <div class="container recovery-container">
+            <h2>Forgot Password?</h2>
+            <p class="subtitle">Enter your email to receive a 6-digit verification code.</p>
 
-        <form action="" method="post" id="recoveryForm" class="form">
-          
-            <div class="input-group">
-                <label for="emailInput">Email Address</label>
-                <input type="email" name="email" id="emailInput" placeholder="name@example.com" required>
-            </div>
+            <form action="" method="post" id="recoveryForm" class="form">
+            
+                <div class="input-group">
+                    <label for="emailInput">Email Address</label>
+                    <input type="email" name="email" id="emailInput" placeholder="name@example.com" required>
+                </div>
 
-            <div class="input-group">
-                <label for="codeInput">Verification Code</label>
-                <input type="text" name="code" id="codeInput" placeholder="Enter 6-digit code" maxlength="6" autocomplete="off">
-            </div>
+                <div class="input-group">
+                    <label for="codeInput">Verification Code</label>
+                    <input type="text" name="code" id="codeInput" placeholder="Enter 6-digit code" maxlength="6" autocomplete="off">
+                </div>
 
-            <input type="submit" value="Send Code" class="sign-in-btn" id="verifyBtn">
-      
-        </form>
+                <input type="submit" value="Send Code" class="sign-in-btn" id="verifyBtn">
+        
+            </form>
 
-        <a href="index.html" class="back-btn">
-            <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-                <path d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
-            </svg>
-            Back to Login
-        </a>
-    </div>
+            <a href="index.html" class="back-btn">
+                <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+                </svg>
+                Back to Login
+            </a>
+        </div>
 
-    <p id="tos">Help: cordel.chat@gmail.com</p>
+        <p id="tos">Help: cordel.chat@gmail.com</p>
 
-  </main>
+    </main>
 </body>
 </html>
