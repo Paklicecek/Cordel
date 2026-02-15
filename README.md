@@ -1,8 +1,6 @@
 # Cordel
 
-A real-time chat application inspired by Discord, built with the PERN stack (PostgreSQL, Express, React-like vanilla JS, Node.js) and Socket.io.
-
-> **Note from Developer:** > This project has reached its final state for now. The development took longer than expected, and I decided to wrap it up to focus on new challenges. I have removed some unfinished features to keep the codebase clean and functional. I might return to this project in the future to implement the missing parts, but for now, this is the final product.
+A real-time chat application inspired by Discord.
 
 ## 🚀 Features
 
