@@ -124,6 +124,7 @@ app.post("/api/email",async (req, res) =>{
         }
         if(result.rows.length > 0){
             code = generateCode()
+            console.log(code)
             const result = await db.query(
                 'UPDATE users SET recovery_code = $1, recovery_expires = NOW() + INTERVAL \'1 hour\' WHERE email = $2', 
                 [code, email]
@@ -142,7 +143,7 @@ app.post("/api/code",async (req, res) =>{
     try {
         const result = await db.query(
             'SELECT recovery_code FROM users WHERE recovery_code = $1 AND email = $2', 
-            [code, email]
+            [code,email]
         )
         if(result.rows.length === 0){
             return res.json({ok: false, message: "Invalid recovery code or email."})

@@ -4,8 +4,8 @@ CREATE TABLE IF NOT EXISTS users (
     email VARCHAR(255) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
     avatar_url VARCHAR(255) DEFAULT '/img/pfps/test.gif',
-    reset_token VARCHAR(255),
-    reset_token_expires TIMESTAMP,
+    recovery_code VARCHAR(255),
+    recovery_expires TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     is_admin BOOLEAN DEFAULT FALSE
 );
