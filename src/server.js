@@ -6,6 +6,8 @@ import { fileURLToPath } from "url"
 import dotenv from "dotenv"
 import bcrypt from "bcryptjs"
 import * as db from "./config/db.js"
+import nodemailer from "nodemailer"
+
 
 dotenv.config()
 
@@ -17,6 +19,12 @@ const __dirname = path.dirname(__filename)
 const app = express()
 const httpServer = createServer(app)
 const io = new Server(httpServer)
+
+let code = null
+function generateCode() {
+    const code = Math.floor(Math.random() * 1000000);
+    return code.toString().padStart(6, '0');
+}
 
 app.use(express.json())
 app.use(express.static(path.join(__dirname, "../public")))
@@ -103,8 +111,52 @@ app.post("/api/setAdmin",async (req, res) =>{
         return res.status(500).json({ error: "Database error" })
     }
 })
-app.post("/api/forgotPass",async (req, res) =>{
 
+app.post("/api/email",async (req, res) =>{
+    const { email } = req.body
+    try {
+        const result = await db.query(
+            'SELECT username FROM users WHERE email = $1', 
+            [email]
+        )
+        if(result.rows.length === 0){
+            return res.json({ok: false, error: "Account with this email adress doesn't exist."})
+        }
+        if(result.rows.length > 0){
+            code = generateCode()
+            const result = await db.query(
+                'UPDATE users SET recovery_code = $1, recovery_expires = NOW() + INTERVAL \'1 hour\' WHERE email = $2', 
+                [code, email]
+            )
+            return res.json({ok: true, message: "Recovery code sent to email."})
+        }
+    }
+    catch (err) {
+        console.error("Error: " + err)
+        return res.status(500).json({ error: "Database error" })
+    }
+})
+
+app.post("/api/code",async (req, res) =>{
+    const { code, email } = req.body
+    try {
+        const result = await db.query(
+            'SELECT recovery_code FROM users WHERE recovery_code = $1 AND email = $2', 
+            [code, email]
+        )
+        if(result.rows.length === 0){
+            return res.json({ok: false, message: "Invalid recovery code or email."})
+        }
+        if(result.rows.length > 0){
+            if(result.rows[0].recovery_code === code){
+                return res.json({ok: true, message: "Recovery code is valid."})
+            }
+        }
+    }
+    catch (err) {
+        console.error("Error: " + err)
+        return res.status(500).json({ok: false, message: "Database error" })
+    }
 })
 
 const onlineUsers = {}
