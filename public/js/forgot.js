@@ -17,24 +17,30 @@ verifyBtn.addEventListener("click", async (e) => {
         let password1 = emailInput.value
         let password2 = codeInput.value
         if(password1 != password2){
-            subtitle.textContent = "Passwords are not matching."
-            subtitle.style.color = "Red"
+            title.textContent = "Passwords are not matching."
+            title.style.color = "Red"
             return
         }
         const email = localStorage.getItem("email")
-        const response = await fetch("/api/email", {
+        const response = await fetch("/api/password", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ password1,email })
+            body: JSON.stringify({ password: password1,email })
         })
         const result = await response.json()
-        if(result.ok){
-
+        if(result.ok && !result.short){
+            title.textContent = result.message
+            title.style.color = "Green"
+            subtitle.textContent = "After 4 seconds you will be sent back to login page."
+            setTimeout(() => {
+                window.location = "../index.html"
+            }, 4000)
         }
         else{
-            
+            title.textContent = result.message
+            title.style.color = "Red"
         }
     }
     else if(codeGroup.classList.contains("code-group")){
@@ -50,9 +56,9 @@ verifyBtn.addEventListener("click", async (e) => {
         })
         const result = await response.json()
         if(result.ok){
-            title.textContent = "Enter the code sent to your email"
+            title.textContent = "Code has been sent to your email"
+            title.style.color = "green"
             subtitle.textContent = "A code has been sent to your email. Please enter it below."
-            subtitle.style.color = "green"
     
             emailGroup.classList.add("code-group")
             codeGroup.classList.remove("code-group")
@@ -73,16 +79,20 @@ verifyBtn.addEventListener("click", async (e) => {
         if(result.ok == true){
             title.textContent = "Enter your new password"
             subtitle.textContent = "Enter your new password down below."
+
             emailGroup.classList.remove("code-group")
             emailLabel.textContent = "New password"
             emailInput.placeholder = "Your new password"
             emailInput.value = ""
+            emailInput.type = "password"
 
             codeLabel.textContent = "New password again"
             codeInput.placeholder = "Your new password again"
             codeInput.value = ""
-
+            codeInput.removeAttribute("maxlength")
+            codeInput.type = "password"
             verifyBtn.value = "Confirm password"
+
             currentStep = "password"
         }
         else{

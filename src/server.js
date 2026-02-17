@@ -140,7 +140,7 @@ app.post("/api/email",async (req, res) =>{
             )
 
                 const info = await transporter.sendMail({
-                    from: "Cordel support - " + process.env.EMAIL,
+                    from: "Cordel support <" + process.env.EMAIL + ">",
                     to: email,
                     subject: "Password Reset Code",
                     html: getEmailHtml(code)
@@ -193,7 +193,7 @@ app.post("/api/password",async (req, res) =>{
         return res.json({ok: true, short: false, message: "Password was succesfully changed." })
     }
     catch(err){
-        return res.status(500).json({ error: "Database error" })
+        return res.status(500).json({ok: false, short:false, error: "Database error" })
     }
 })
 
