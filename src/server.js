@@ -7,10 +7,9 @@ import dotenv from "dotenv"
 import bcrypt from "bcryptjs"
 import * as db from "./config/db.js"
 import nodemailer from "nodemailer"
-
+import { getEmailHtml } from "./emailTemplate.js"
 
 dotenv.config()
-
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -144,7 +143,7 @@ app.post("/api/email",async (req, res) =>{
                     from: "Cordel support - " + process.env.EMAIL,
                     to: email,
                     subject: "Password Reset Code",
-                    html: `<b>Your verification code is: ${code}</b>`
+                    html: getEmailHtml(code)
                 })
                 console.log("Message sent:", info.messageId)
 
