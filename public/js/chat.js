@@ -6,10 +6,18 @@ const messageInput = document.getElementById("messageInput")
 const sidebar = document.querySelector(".user-sidebar")
 const usersListContainer = document.getElementById("users-list")
 const usernameBox = document.querySelector(".my-username")
+const logoutBtn = document.getElementById("logoutBtn")
 
 const currentUser = localStorage.getItem("user")
 const isAdmin = localStorage.getItem("admin")
 const id = localStorage.getItem("ID")
+
+if (logoutBtn) {
+    logoutBtn.addEventListener("click", () => {
+        localStorage.clear()
+        window.location.href = "index.html"
+    })
+}
 
 usernameBox.textContent = currentUser
 if(isAdmin === "true"){

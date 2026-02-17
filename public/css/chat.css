@@ -368,3 +368,32 @@ body {
 .link:hover{
    text-decoration: underline;
 }
+.logout-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 8px;       
+    border-radius: 8px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+}
+.logout-btn img {
+    width: 20px;
+    height: 20px;
+    opacity: 0.6; 
+    transition: opacity 0.2s ease;
+}
+
+.logout-btn:hover {
+    background-color: rgba(239, 68, 68, 0.15);
+}
+.logout-btn:hover img {
+    opacity: 1;
+    filter: invert(33%) sepia(95%) saturate(7466%) hue-rotate(-7deg) brightness(97%) contrast(105%);
+}
+.logout-btn:active {
+    background-color: rgba(239, 68, 68, 0.25);
+    transform: scale(0.95); 
+}
