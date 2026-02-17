@@ -164,7 +164,7 @@ app.post("/api/code",async (req, res) =>{
             [code,email]
         )
         if(result.rows.length === 0){
-            return res.json({ok: false, message: "Invalid recovery code or email."})
+            return res.json({ok: false, message: "Invalid recovery code."})
         }
         if(result.rows.length > 0){
             if(result.rows[0].recovery_code === code){
@@ -175,6 +175,25 @@ app.post("/api/code",async (req, res) =>{
     catch (err) {
         console.error("Error: " + err)
         return res.status(500).json({ok: false, message: "Database error" })
+    }
+})
+
+app.post("/api/password",async (req, res) =>{
+    const { password ,email} = req.body
+    try{
+        if(password.length < 6){
+            return res.json({ok: false, short: true , error: "Password is too short."})
+        }
+        const hash = await bcrypt.hash(password, 10)
+
+        await db.query(
+            'UPDATE users SET password_hash = $1 WHERE email = $2 ', 
+            [hash,email]
+        )
+        return res.json({ok: true, short: false, message: "Password was succesfully changed." })
+    }
+    catch(err){
+        return res.status(500).json({ error: "Database error" })
     }
 })
 

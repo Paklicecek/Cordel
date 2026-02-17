@@ -7,9 +7,37 @@ const subtitle = document.querySelector(".subtitle")
 const emailLabel = document.querySelector(".emailLabel")
 const emailGroup = document.querySelector(".email-group")
 const codeGroup = document.querySelector(".code-group")
+const codeLabel = document.querySelector(".codeLabel")
+
+let currentStep = "none"
 
 verifyBtn.addEventListener("click", async (e) => {
-        if(codeGroup.classList.contains("code-group")){
+    if(currentStep === "password"){
+        e.preventDefault()
+        let password1 = emailInput.value
+        let password2 = codeInput.value
+        if(password1 != password2){
+            subtitle.textContent = "Passwords are not matching."
+            subtitle.style.color = "Red"
+            return
+        }
+        const email = localStorage.getItem("email")
+        const response = await fetch("/api/email", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ password1,email })
+        })
+        const result = await response.json()
+        if(result.ok){
+
+        }
+        else{
+            
+        }
+    }
+    else if(codeGroup.classList.contains("code-group")){
         e.preventDefault()
         const email = emailInput.value
         localStorage.setItem("email", email)
@@ -22,12 +50,11 @@ verifyBtn.addEventListener("click", async (e) => {
         })
         const result = await response.json()
         if(result.ok){
-            title.textContent = "Enter the code sent to your email."
+            title.textContent = "Enter the code sent to your email"
             subtitle.textContent = "A code has been sent to your email. Please enter it below."
             subtitle.style.color = "green"
     
             emailGroup.classList.add("code-group")
-    
             codeGroup.classList.remove("code-group")
         }
     }
@@ -44,8 +71,24 @@ verifyBtn.addEventListener("click", async (e) => {
         })
         let result = await response.json()
         if(result.ok == true){
-            console.log("Yay it works!")
+            title.textContent = "Enter your new password"
+            subtitle.textContent = "Enter your new password down below."
+            emailGroup.classList.remove("code-group")
+            emailLabel.textContent = "New password"
+            emailInput.placeholder = "Your new password"
+            emailInput.value = ""
+
+            codeLabel.textContent = "New password again"
+            codeInput.placeholder = "Your new password again"
+            codeInput.value = ""
+
+            verifyBtn.value = "Confirm password"
+            currentStep = "password"
         }
-        else console.log("You fucked up!")
+        else{
+            title.textContent = result.message
+            title.style.color = "Red"
+            subtitle.textContent = "Please try again later."
+        } 
     }
 })
