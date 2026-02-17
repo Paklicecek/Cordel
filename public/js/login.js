@@ -84,7 +84,7 @@ form.addEventListener("submit", async (event) => {
         subtitle.textContent = result.message
         subtitle.style.color = "#50d557"
     }
-    if (!result.short && result.ok) {
+    else if (!result.short && result.ok) {
         localStorage.setItem("user", result.user.username)
         localStorage.setItem("ID", result.user.id)
         localStorage.setItem("admin", result.user.isAdmin)
