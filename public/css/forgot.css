@@ -42,3 +42,7 @@
 .recovery-container {
     padding-bottom: 32px;
 }
+.code-group{
+    display: none;
+    margin-bottom: 0px;
+}

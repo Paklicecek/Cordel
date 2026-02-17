@@ -20,6 +20,16 @@ const app = express()
 const httpServer = createServer(app)
 const io = new Server(httpServer)
 
+const transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+    auth: {
+      user: process.env.EMAIL,
+      pass: process.env.EMAILPASS,
+    },
+  })
+
 function generateCode() {
     const code = Math.floor(Math.random() * 1000000);
     return code.toString().padStart(6, '0');
@@ -130,25 +140,13 @@ app.post("/api/email",async (req, res) =>{
                 [code, email]
             )
 
-            const transporter = nodemailer.createTransport({
-                host: "smtp.gmail.com",
-                port: 465,
-                secure: true,
-                auth: {
-                  user: process.env.EMAIL,
-                  pass: process.env.EMAILPASS,
-                },
-              })
-              (async () => {
                 const info = await transporter.sendMail({
-                  from: "Cordel support - " + process.env.email,
-                  to: email,
-                  subject: "Hello ✔",
-                  text: "Your code is: " + code, 
-                  html: "<b>Hello world?</b>",
+                    from: "Cordel support - " + process.env.EMAIL,
+                    to: email,
+                    subject: "Password Reset Code",
+                    html: `<b>Your verification code is: ${code}</b>`
                 })
                 console.log("Message sent:", info.messageId)
-              })()
 
             return res.json({ok: true, message: "Recovery code sent to email."})
         }
