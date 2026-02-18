@@ -7,6 +7,11 @@ const sidebar = document.querySelector(".user-sidebar")
 const usersListContainer = document.getElementById("users-list")
 const usernameBox = document.querySelector(".my-username")
 const logoutBtn = document.getElementById("logoutBtn")
+const avatar = document.getElementById("currentUserAvatar")
+const pfpPopup = document.getElementById("pfpPopup")
+const pfpCancelBtn = document.getElementById("pfpCancelBtn")
+const pfpSaveBtn = document.getElementById("pfpSaveBtn")
+const pfpFileInput = document.getElementById("pfpFileInput")
 
 const currentUser = localStorage.getItem("user")
 const isAdmin = localStorage.getItem("admin")
@@ -225,3 +230,16 @@ socket.on("stopTyping",(user) => {
     }   
 })
 messageInput.focus()
+
+avatar.addEventListener("click", () => {
+pfpPopup.classList.remove("closed")
+pfpPopup.classList.add("opened")
+
+})
+pfpCancelBtn.addEventListener("click", () => {
+    pfpPopup.classList.remove("opened")
+    pfpPopup.classList.add("closed")
+})
+pfpSaveBtn.addEventListener("click", () => {
+    
+})
