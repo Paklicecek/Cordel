@@ -1,12 +1,13 @@
 # Cordel
 
 A real-time chat application inspired by Discord.
+**Project completed as of 18.2.2026.** The PFP upload feature was entirely vibe coded.
 
 ## 🚀 Features
 
 * **Real-time Messaging:** Instant message delivery using Socket.io.
 * **User Authentication:** Secure Signup and Login system with password hashing (bcrypt).
-* **Random Avatars:** Automatic generation of unique user avatars via DiceBear API based on username seeds.
+* **Custom & Random Avatars:** Users can upload their own PFPs or get automatic DiceBear avatars.
 * **Live Status:** See who is Online and Offline in real-time.
 * **Typing Indicators:** See when other users are typing.
 * **Message History:** Persistent chat history stored in PostgreSQL.
@@ -24,10 +25,8 @@ A real-time chat application inspired by Discord.
 
 These features were originally planned but were removed or postponed to finalize the project:
 
-1.  **Settings Pop-up:** Ability to change password, profile picture, username, and view account stats.
-2.  **Forgot Password:** Password recovery page.
-3.  **Mobile Responsivity:** Full optimization for mobile devices.
-4.  **Desktop App:** Wrapping the application as an Electron app.
+1.  **Mobile Responsivity:** Full optimization for mobile devices.
+2.  **Desktop App:** Wrapping the application as an Electron app.
 
 ## 📦 How to Run
 
