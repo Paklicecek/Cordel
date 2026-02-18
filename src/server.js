@@ -8,6 +8,9 @@ import bcrypt from "bcryptjs"
 import * as db from "./config/db.js"
 import nodemailer from "nodemailer"
 import { getEmailHtml } from "./emailTemplate.js"
+import multer from "multer"
+import fs from "fs"
+
 
 dotenv.config()
 
@@ -197,10 +200,55 @@ app.post("/api/password",async (req, res) =>{
     }
 })
 
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        const dir = path.join(__dirname, "../public/img/pfps")
+        if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
+        cb(null, dir)
+    },
+    filename: (req, file, cb) => {
+        const ext = path.extname(file.originalname)
+        cb(null, `avatar-${Date.now()}${ext}`)
+    }
+})
+
+const upload = multer({ storage })
+app.post("/api/pfp", upload.single("avatar"), async (req, res) => {
+    try {
+        if (!req.file) return res.json({ ok: false, error: "No file uploaded" })
+        
+        const { username } = req.body
+        const avatarUrl = `/img/pfps/${req.file.filename}`
+        
+        await db.query(
+            'UPDATE users SET avatar_url = $1 WHERE username = $2', 
+            [avatarUrl, username]
+        )
+        return res.json({ ok: true })
+    } catch (err) {
+        return res.status(500).json({ ok: false, error: "Server error" })
+    }
+})
+
+app.get("/api/avatar/:username", async (req, res) => {
+    try {
+        const { username } = req.params
+        const result = await db.query('SELECT avatar_url FROM users WHERE username = $1', [username])
+        
+        if (result.rows.length > 0) {
+            return res.json({ ok: true, avatar: result.rows[0].avatar_url })
+        }
+        return res.json({ ok: false })
+    } catch (err) {
+        console.error(err)
+        return res.status(500).json({ ok: false })
+    }
+})
+
 const onlineUsers = {}
 
 async function updateUsersList() {
-    const result = await db.query('SELECT username, is_admin FROM users')
+    const result = await db.query('SELECT username, is_admin, avatar_url FROM users')
     const allUsers = result.rows 
 
     const onlineUsernames = Object.values(onlineUsers)
@@ -231,21 +279,22 @@ io.on("connection", async (socket) => {
     // Loading messages from DB 
     try {
         const result = await db.query(`
-            SELECT messages.id, messages.content, users.username, users.is_admin, messages.created_at 
+            SELECT messages.id, messages.content, users.username, users.is_admin, users.avatar_url, messages.created_at 
             FROM messages 
             JOIN users ON messages.user_id = users.id 
             ORDER BY messages.created_at ASC 
         `)
 
-        result.rows.forEach(row => {
-            socket.emit("chatMessage", {
-                user: row.username, 
-                isAdmin: row.is_admin,
-                msgId: row.id, 
-                msg: row.content,
-                time: row.created_at
-            })
+    result.rows.forEach(row => {
+        socket.emit("chatMessage", {
+            user: row.username, 
+            isAdmin: row.is_admin,
+            avatar: row.avatar_url, 
+            msgId: row.id, 
+            msg: row.content,
+            time: row.created_at
         })
+    })
 
     } 
     catch (err) {
@@ -255,12 +304,13 @@ io.on("connection", async (socket) => {
     socket.on("chatMessage", async (data) => {
         try {
             const userResult = await db.query(
-                'SELECT id,is_admin FROM users WHERE username = $1',
+                'SELECT id,is_admin,avatar_url FROM users WHERE username = $1',
                 [data.user]
             )
             
             if (userResult.rows.length > 0) {
                 const userId = userResult.rows[0].id
+                const userAvatar = userResult.rows[0].avatar_url
 
                 const result = await db.query(
                     'INSERT INTO messages (user_id, content) VALUES ($1, $2) RETURNING id',
@@ -269,6 +319,7 @@ io.on("connection", async (socket) => {
                 io.emit("chatMessage", {
                     user: data.user,
                     isAdmin: userResult.rows[0].is_admin,
+                    avatar: userAvatar,
                     msgId: result.rows[0].id,
                     msg: data.msg,
                     time: new Date()

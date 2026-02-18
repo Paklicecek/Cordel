@@ -101,7 +101,7 @@ socket.on("updateUserList", ({ online, offline }) => {
             else avatarWrapper.className = "avatar-wrapper status-offline"
 
             const img = document.createElement("img")
-            img.src = "img/pfps/test.gif"
+            img.src = (user.avatar_url || "img/pfps/test.gif")
             img.alt = user.username
 
             const span = document.createElement("span")
@@ -149,7 +149,7 @@ function displayMessage(data) {
     if(data.isAdmin === true){
         div.innerHTML = `
         <div class="avatar-wrapper">
-            <img src="img/pfps/test.gif" alt="Avatar">
+            <img src="${data.avatar}" alt="Avatar">
         </div>
         <div class="message-content">
             <div class="message-header">
@@ -164,7 +164,7 @@ function displayMessage(data) {
     else{
         div.innerHTML = `
             <div class="avatar-wrapper">
-                <img src="img/pfps/test.gif" alt="Avatar">
+                <img src="${data.avatar}" alt="Avatar">
             </div>
             <div class="message-content">
                 <div class="message-header">
@@ -240,6 +240,53 @@ pfpCancelBtn.addEventListener("click", () => {
     pfpPopup.classList.remove("opened")
     pfpPopup.classList.add("closed")
 })
-pfpSaveBtn.addEventListener("click", () => {
-    
+pfpSaveBtn.addEventListener("click", async () => {
+    const file = pfpFileInput.files[0]
+
+    if (!file) return
+
+    const formData = new FormData()
+    formData.append("avatar", file)
+    formData.append("username", currentUser)
+
+    try {
+        const originalText = pfpSaveBtn.innerText
+        pfpSaveBtn.innerText = "Uploading..."
+        pfpSaveBtn.disabled = true
+
+        const response = await fetch("/api/pfp", {
+            method: "POST",
+            body: formData
+        })
+        const result = await response.json()
+        
+        if (result.ok) {
+            pfpFileInput.value = ""
+            location.reload()
+        } else {
+            console.log("Upload failed")
+        }
+        
+        pfpSaveBtn.innerText = originalText
+        pfpSaveBtn.disabled = false
+    } catch (err) {
+        console.error(err)
+        pfpSaveBtn.innerText = "Upload"
+        pfpSaveBtn.disabled = false
+    }
 })
+async function loadMyAvatar() {
+    if (!currentUser) return
+
+    try {
+        const res = await fetch(`/api/avatar/${currentUser}`)
+        const data = await res.json()
+        
+        if (data.ok && data.avatar) {
+            currentUserAvatar.src = data.avatar
+        }
+    } catch (err) {
+        console.error("Avatar was not loaded: ", err)
+    }
+}
+loadMyAvatar()
